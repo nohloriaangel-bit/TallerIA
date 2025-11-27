@@ -1,0 +1,38 @@
+:root{
+  --bg:#f3f4f6;
+  --panel:#ffffff;
+  --accent:#4f46e5;
+  --muted:#6b7280;
+  --text:#0f172a;
+}
+:root.dark{
+  --bg:#0b1220;
+  --panel:#071021;
+  --accent:#7c3aed;
+  --muted:#94a3b8;
+  --text:#e6eef8;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; font-family:Inter,Segoe UI,Arial,system-ui; background:var(--bg); color:var(--text);
+  display:flex; align-items:center; justify-content:center; padding:24px;
+}
+.app{width:380px; max-width:95%}
+.calculator{background:var(--panel); border-radius:12px; box-shadow:0 6px 30px rgba(2,6,23,0.12); overflow:hidden}
+.calc-header{display:flex; justify-content:flex-end; padding:10px}
+.theme-toggle button{background:transparent;border:0;font-size:18px;cursor:pointer}
+.display{padding:16px; background:linear-gradient(180deg, rgba(0,0,0,0.02), transparent);}
+.history-preview{font-size:13px;color:var(--muted); min-height:18px}
+.result{font-size:32px; text-align:right; padding:6px 2px; font-weight:600}
+.buttons{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; padding:16px}
+.btn{background:transparent;border:0;padding:16px;border-radius:8px;font-size:18px;cursor:pointer;background:rgba(0,0,0,0.03)}
+.btn:focus{outline:3px solid rgba(79,70,229,0.18);outline-offset:2px}
+.btn.op{background:linear-gradient(180deg,rgba(79,70,229,0.12),rgba(79,70,229,0.06)); color:white; color:var(--panel)}
+.btn.equal{background:var(--accent); color:white}
+.btn.wide{grid-column:span 2}
+.history{border-top:1px solid rgba(0,0,0,0.04); padding:12px}
+.history-list{list-style:none;margin:0;padding:0;max-height:120px;overflow:auto}
+.history-list li{font-size:13px;color:var(--muted); padding:6px 0; border-bottom:1px dashed rgba(0,0,0,0.03)}
+.visually-hidden{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
+@media (prefers-reduced-motion: no-preference){.btn{transition:all .12s ease}}
