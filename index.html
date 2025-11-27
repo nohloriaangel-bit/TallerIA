@@ -3,19 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reloj Digital con Alarma</title>
+    <title>Quiz Interactivo</title>
     <style>
-        /* Resetear estilos por defecto */
+        /* ============== ESTILOS GENERALES ============== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        /* Fondo del body */
         body {
-            font-family: 'Courier New', monospace;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -23,678 +22,807 @@
             padding: 20px;
         }
 
-        /* Contenedor principal */
+        /* ============== CONTENEDOR PRINCIPAL ============== */
         .container {
-            background: #0f3460;
+            background: white;
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 0 30px rgba(16, 185, 129, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             padding: 40px;
-            max-width: 700px;
+            max-width: 600px;
             width: 100%;
-            border: 2px solid #10b981;
-        }
-
-        /* Título */
-        h1 {
-            color: #10b981;
-            text-align: center;
-            margin-bottom: 40px;
-            font-size: 28px;
-            text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
-            letter-spacing: 2px;
-        }
-
-        /* Sección del reloj */
-        .clock-section {
-            background: #0a1929;
-            border: 2px solid #10b981;
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: inset 0 0 20px rgba(16, 185, 129, 0.1);
-        }
-
-        /* Display del reloj - efecto digital */
-        .clock-display {
-            font-size: 80px;
-            font-weight: bold;
-            color: #10b981;
-            text-align: center;
-            text-shadow: 0 0 20px rgba(16, 185, 129, 0.8);
-            font-family: 'Courier New', monospace;
-            letter-spacing: 5px;
-            margin-bottom: 20px;
-            font-variant-numeric: tabular-nums;
-        }
-
-        /* Display de la fecha */
-        .date-display {
-            font-size: 18px;
-            color: #60a5fa;
-            text-align: center;
-            text-shadow: 0 0 10px rgba(96, 165, 250, 0.5);
-            letter-spacing: 1px;
-            font-weight: 600;
-        }
-
-        /* Sección de alarma */
-        .alarm-section {
-            background: #0a1929;
-            border: 2px solid #f59e0b;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: inset 0 0 20px rgba(245, 158, 11, 0.05);
-        }
-
-        /* Título de sección */
-        .alarm-section h2 {
-            color: #f59e0b;
-            font-size: 20px;
-            margin-bottom: 20px;
-            text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
-            letter-spacing: 1px;
-        }
-
-        /* Grupo de entrada */
-        .input-group {
+            min-height: 500px;
             display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* ============== PANTALLA DE INICIO ============== */
+        .inicio-screen {
+            text-align: center;
+        }
+
+        .inicio-screen h1 {
+            color: #667eea;
+            font-size: 42px;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .inicio-screen .subtitle {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        /* Selector de categoría */
+        .categoria-selector {
+            margin-bottom: 30px;
+        }
+
+        .categoria-selector label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .categoria-selector select {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            background: white;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .categoria-selector select:hover {
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.2);
+        }
+
+        .categoria-selector select:focus {
+            outline: none;
+            box-shadow: 0 0 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Botón Comenzar */
+        .btn-comenzar {
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-comenzar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-comenzar:active {
+            transform: translateY(0);
+        }
+
+        /* ============== PANTALLA DE PREGUNTAS ============== */
+        .quiz-screen {
+            display: none;
+        }
+
+        /* Contador de pregunta */
+        .pregunta-contador {
+            color: #667eea;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Barra de progreso */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        /* Texto de pregunta */
+        .pregunta-texto {
+            color: #333;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            line-height: 1.4;
+        }
+
+        /* Contenedor de opciones */
+        .opciones-container {
+            display: flex;
+            flex-direction: column;
             gap: 15px;
             margin-bottom: 20px;
+        }
+
+        /* Botones de opciones */
+        .opcion-btn {
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            background: #f5f5f5;
+            color: #333;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            text-transform: capitalize;
+        }
+
+        .opcion-btn:hover {
+            background: #efefef;
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .opcion-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        /* Estados de respuesta */
+        .opcion-btn.correcta {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .opcion-btn.incorrecta {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        /* Feedback visual */
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        .feedback.correcta {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #28a745;
+        }
+
+        .feedback.incorrecta {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #dc3545;
+        }
+
+        .feedback.visible {
+            display: block;
+        }
+
+        /* Animación de entrada */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ============== PANTALLA DE RESULTADOS ============== */
+        .resultados-screen {
+            display: none;
+            text-align: center;
+        }
+
+        .resultados-screen h2 {
+            color: #667eea;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        /* Círculo de puntuación */
+        .puntuacion-circulo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 20px auto;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .puntuacion-circulo .numero {
+            font-size: 48px;
+            font-weight: 700;
+        }
+
+        .puntuacion-circulo .total {
+            font-size: 16px;
+            margin-top: 5px;
+        }
+
+        /* Porcentaje */
+        .porcentaje {
+            font-size: 28px;
+            font-weight: 700;
+            color: #667eea;
+            margin: 20px 0;
+        }
+
+        /* Mensaje de desempeño */
+        .mensaje-desempenio {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .mensaje-desempenio.excelente {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #28a745;
+        }
+
+        .mensaje-desempenio.bien {
+            background: #fff3cd;
+            color: #856404;
+            border: 2px solid #ffc107;
+        }
+
+        .mensaje-desempenio.mejorar {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #dc3545;
+        }
+
+        /* Botones de acción */
+        .botones-resultados {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
             flex-wrap: wrap;
         }
 
-        /* Input time */
-        input[type="time"] {
-            padding: 12px;
-            font-size: 16px;
-            background: #1e293b;
-            color: #10b981;
-            border: 2px solid #f59e0b;
-            border-radius: 8px;
-            font-family: 'Courier New', monospace;
-            font-weight: 600;
-            flex: 1;
-            min-width: 150px;
-        }
-
-        input[type="time"]:focus {
-            outline: none;
-            box-shadow: 0 0 15px rgba(245, 158, 11, 0.6);
-        }
-
-        /* Estilos de botones */
-        button {
-            padding: 12px 24px;
+        .btn-accion {
+            padding: 12px 30px;
             font-size: 16px;
             font-weight: 600;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-family: 'Courier New', monospace;
-            letter-spacing: 1px;
         }
 
-        /* Botón Establecer Alarma */
-        #setAlarmBtn {
-            background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
-            color: #0a1929;
-            box-shadow: 0 5px 15px rgba(245, 158, 11, 0.4);
-            flex: 0.5;
-            min-width: 140px;
-        }
-
-        #setAlarmBtn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.6);
-        }
-
-        #setAlarmBtn:active {
-            transform: translateY(0);
-        }
-
-        /* Botón Cancelar Alarma */
-        #cancelAlarmBtn {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        .btn-reintentar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
-            flex: 0.5;
-            min-width: 140px;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
 
-        #cancelAlarmBtn:hover {
+        .btn-reintentar:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.6);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.6);
         }
 
-        #cancelAlarmBtn:active {
-            transform: translateY(0);
+        .btn-home {
+            background: #e0e0e0;
+            color: #333;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
-        /* Estado del botón deshabilitado */
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none !important;
+        .btn-home:hover {
+            background: #d0d0d0;
+            transform: translateY(-2px);
         }
 
-        /* Indicador de alarma activa */
-        .alarm-status {
-            background: #1e293b;
-            border: 2px solid #10b981;
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-            margin-top: 20px;
-            color: #10b981;
-            font-size: 16px;
-            font-weight: 600;
-            text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
-            display: none;
+        /* ============== PANTALLA OCULTA ============== */
+        .hidden {
+            display: none !important;
         }
 
-        .alarm-status.active {
-            display: block;
-            animation: pulse 1s infinite;
-        }
-
-        /* Animación de pulso */
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-                border-color: #10b981;
-                box-shadow: inset 0 0 10px rgba(16, 185, 129, 0.3);
-            }
-            50% {
-                opacity: 0.7;
-                border-color: #34d399;
-                box-shadow: inset 0 0 20px rgba(16, 185, 129, 0.5);
-            }
-        }
-
-        /* Área de notificación de alarma */
-        .alarm-notification {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            background: #ef4444;
-            color: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 20px 60px rgba(239, 68, 68, 0.8);
-            z-index: 1000;
-            text-align: center;
-            font-size: 24px;
-            font-weight: 700;
-            border: 3px solid #dc2626;
-            animation: alarmFadeIn 0.3s ease forwards;
-            display: none;
-        }
-
-        .alarm-notification.alarm-ringing {
-            animation: alarmRinging 0.5s infinite;
-        }
-
-        /* Animación de entrada de alarma */
-        @keyframes alarmFadeIn {
-            to {
-                transform: translate(-50%, -50%) scale(1);
-            }
-        }
-
-        /* Animación de parpadeo de alarma */
-        @keyframes alarmRinging {
-            0%, 100% {
-                background: #ef4444;
-                transform: translate(-50%, -50%) scale(1);
-            }
-            50% {
-                background: #dc2626;
-                transform: translate(-50%, -50%) scale(1.05);
-            }
-        }
-
-        /* Indicador LED de alarma */
-        .alarm-indicator {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            background: #ef4444;
-            border-radius: 50%;
-            margin-right: 8px;
-            box-shadow: 0 0 10px rgba(239, 68, 68, 0.8);
-            animation: ledBlink 1s infinite;
-        }
-
-        .alarm-indicator.inactive {
-            background: #6b7280;
-            box-shadow: none;
-            animation: none;
-        }
-
-        /* Animación de LED */
-        @keyframes ledBlink {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.3;
-            }
-        }
-
-        /* Información */
-        .info {
-            background: #1e293b;
-            border-left: 4px solid #3b82f6;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 13px;
-            color: #60a5fa;
-            margin-top: 20px;
-            line-height: 1.6;
-        }
-
-        /* Responsive */
+        /* ============== RESPONSIVE ============== */
         @media (max-width: 600px) {
             .container {
                 padding: 25px;
+                min-height: auto;
             }
 
-            h1 {
-                font-size: 22px;
-                margin-bottom: 25px;
+            .inicio-screen h1 {
+                font-size: 28px;
             }
 
-            .clock-display {
-                font-size: 50px;
-                letter-spacing: 3px;
-                margin-bottom: 15px;
+            .pregunta-texto {
+                font-size: 18px;
             }
 
-            .date-display {
+            .opcion-btn {
+                padding: 14px;
                 font-size: 14px;
             }
 
-            .input-group {
+            .puntuacion-circulo {
+                width: 120px;
+                height: 120px;
+            }
+
+            .puntuacion-circulo .numero {
+                font-size: 36px;
+            }
+
+            .porcentaje {
+                font-size: 24px;
+            }
+
+            .botones-resultados {
                 flex-direction: column;
             }
 
-            input[type="time"] {
-                min-width: 100%;
-                flex: unset;
-            }
-
-            #setAlarmBtn,
-            #cancelAlarmBtn {
-                flex: 1;
-                min-width: 100%;
-            }
-
-            .alarm-notification {
-                padding: 30px;
-                font-size: 18px;
+            .btn-accion {
+                width: 100%;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>⏰ RELOJ DIGITAL CON ALARMA</h1>
+        <!-- ============== PANTALLA DE INICIO ============== -->
+        <div class="inicio-screen" id="inicioScreen">
+            <h1>📚 Quiz Interactivo</h1>
+            <p class="subtitle">
+                Pon a prueba tus conocimientos sobre JavaScript básico.<br>
+                Responde todas las preguntas y descubre tu puntuación.
+            </p>
 
-        <!-- Sección del reloj -->
-        <div class="clock-section">
-            <!-- Display del reloj -->
-            <div class="clock-display" id="clockDisplay">00:00:00</div>
+            <!-- Selector de categoría -->
+            <div class="categoria-selector">
+                <label for="categoriaSelect">Selecciona una categoría:</label>
+                <select id="categoriaSelect">
+                    <option value="javascript">JavaScript Básico</option>
+                    <option value="html">HTML5</option>
+                    <option value="css">CSS3</option>
+                </select>
+            </div>
 
-            <!-- Display de la fecha -->
-            <div class="date-display" id="dateDisplay">Lunes, 01 de enero de 2025</div>
+            <button class="btn-comenzar" id="btnComenzar">Comenzar Quiz</button>
         </div>
 
-        <!-- Sección de alarma -->
-        <div class="alarm-section">
-            <h2>⏲️ CONFIGURAR ALARMA</h2>
-
-            <div class="input-group">
-                <input 
-                    type="time" 
-                    id="alarmTime" 
-                    placeholder="HH:MM"
-                    title="Selecciona la hora de la alarma"
-                >
-                <button id="setAlarmBtn">Establecer Alarma</button>
-                <button id="cancelAlarmBtn" disabled>Cancelar Alarma</button>
+        <!-- ============== PANTALLA DE PREGUNTAS ============== -->
+        <div class="quiz-screen" id="quizScreen">
+            <!-- Contador y barra de progreso -->
+            <div class="pregunta-contador" id="contadorPregunta">Pregunta 1 de 5</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
             </div>
 
-            <!-- Indicador de alarma activa -->
-            <div class="alarm-status" id="alarmStatus">
-                <span class="alarm-indicator"></span>
-                ALARMA ACTIVA - Suena a las <span id="alarmTimeDisplay">--:--</span>
+            <!-- Pregunta -->
+            <div class="pregunta-texto" id="preguntaTexto">
+                ¿Cuál es tu pregunta?
             </div>
 
-            <!-- Información -->
-            <div class="info">
-                <strong>📌 Cómo usar:</strong><br>
-                1. Selecciona una hora en el campo de tiempo<br>
-                2. Haz clic en "Establecer Alarma"<br>
-                3. La alarma sonará cuando la hora actual coincida<br>
-                4. Puedes cancelarla en cualquier momento
+            <!-- Opciones -->
+            <div class="opciones-container" id="opcionesContainer">
+                <!-- Se llenarán dinámicamente -->
+            </div>
+
+            <!-- Feedback -->
+            <div class="feedback" id="feedback">
+                <!-- Se actualizará dinámicamente -->
             </div>
         </div>
-    </div>
 
-    <!-- Notificación de alarma -->
-    <div class="alarm-notification" id="alarmNotification">
-        🔔 ¡¡ALARMA SONANDO!! 🔔<br>
-        <span style="font-size: 16px; margin-top: 10px; display: block;">Haz clic para detener</span>
+        <!-- ============== PANTALLA DE RESULTADOS ============== -->
+        <div class="resultados-screen" id="resultadosScreen">
+            <h2>¡Quiz Completado!</h2>
+
+            <!-- Círculo de puntuación -->
+            <div class="puntuacion-circulo">
+                <div class="numero" id="puntuacionNumero">0</div>
+                <div class="total" id="puntuacionTotal">de 0</div>
+            </div>
+
+            <!-- Porcentaje -->
+            <div class="porcentaje" id="porcentajeTexto">0%</div>
+
+            <!-- Mensaje de desempeño -->
+            <div class="mensaje-desempenio" id="mensajeDesempenio">
+                Mensaje de desempeño
+            </div>
+
+            <!-- Botones -->
+            <div class="botones-resultados">
+                <button class="btn-accion btn-reintentar" id="btnReintentar">
+                    🔄 Reintentar
+                </button>
+                <button class="btn-accion btn-home" id="btnHome">
+                    🏠 Ir al Inicio
+                </button>
+            </div>
+        </div>
     </div>
 
     <script>
+        /* ============== BASE DE DATOS DE PREGUNTAS ============== */
+
+        /**
+         * Base de datos de preguntas organizadas por categoría
+         * Estructura: {pregunta, opciones[], correcta (índice 0-3)}
+         */
+        const preguntasPorCategoria = {
+            javascript: [
+                {
+                    pregunta: "¿Cuál es la forma correcta de declarar una variable en JavaScript?",
+                    opciones: ["var nombre = 'Juan';", "nombre = 'Juan';", "variable nombre = 'Juan';", "declare nombre = 'Juan';"],
+                    correcta: 0,
+                    explicacion: "La forma correcta es usar 'var', 'let' o 'const' para declarar una variable."
+                },
+                {
+                    pregunta: "¿Qué retorna typeof null en JavaScript?",
+                    opciones: ["null", "object", "undefined", "NullType"],
+                    correcta: 1,
+                    explicacion: "JavaScript considera null como un 'object' debido a un error histórico en el lenguaje."
+                },
+                {
+                    pregunta: "¿Cuál es la diferencia entre '==' y '===' en JavaScript?",
+                    opciones: [
+                        "No hay diferencia",
+                        "'==' compara valores, '===' compara valor y tipo",
+                        "'===' compara solo valores",
+                        "'==' es para strings y '===' para números"
+                    ],
+                    correcta: 1,
+                    explicacion: "'==' realiza conversión de tipo (coerción), mientras que '===' es una comparación estricta."
+                },
+                {
+                    pregunta: "¿Qué método se usa para convertir un string a número?",
+                    opciones: ["String()", "Number()", "parseInt()", "toNumber()"],
+                    correcta: 1,
+                    explicacion: "Number() es el método estándar, aunque parseInt() también funciona para enteros."
+                },
+                {
+                    pregunta: "¿Cuál es el resultado de 0.1 + 0.2 === 0.3 en JavaScript?",
+                    opciones: ["true", "false", "undefined", "error"],
+                    correcta: 1,
+                    explicacion: "False porque JavaScript usa punto flotante, causando errores de precisión. Resultado es 0.30000000000000004"
+                }
+            ],
+            html: [
+                {
+                    pregunta: "¿Cuál es la etiqueta correcta para un párrafo en HTML5?",
+                    opciones: ["<paragraph>", "<p>", "<para>", "<text>"],
+                    correcta: 1,
+                    explicacion: "La etiqueta <p> se usa para definir párrafos en HTML."
+                },
+                {
+                    pregunta: "¿Para qué sirve la etiqueta <semantic>?",
+                    opciones: ["Define semántica", "No existe, es ficticia", "Organiza contenido", "Valida HTML"],
+                    correcta: 1,
+                    explicacion: "La etiqueta <semantic> no existe. HTML5 usa etiquetas como <header>, <nav>, <article>, etc."
+                },
+                {
+                    pregunta: "¿Cuál atributo se usa para vincular una hoja de estilos CSS?",
+                    opciones: ["<script>", "<link rel='stylesheet'>", "<style>", "<css>"],
+                    correcta: 1,
+                    explicacion: "Se usa <link rel='stylesheet' href='archivo.css'> para vincular archivos CSS externos."
+                },
+                {
+                    pregunta: "¿Qué hace el atributo 'alt' en una imagen?",
+                    opciones: [
+                        "Aumenta el tamaño de la imagen",
+                        "Proporciona texto alternativo si la imagen no carga",
+                        "Cambia el color de la imagen",
+                        "Acelera la carga de la página"
+                    ],
+                    correcta: 1,
+                    explicacion: "El atributo 'alt' es importante para accesibilidad y SEO."
+                },
+                {
+                    pregunta: "¿Cuál es la estructura básica correcta de un documento HTML5?",
+                    opciones: [
+                        "<html><body></body></html>",
+                        "<!DOCTYPE html><html><head></head><body></body></html>",
+                        "<document><content></content></document>",
+                        "<page><section></section></page>"
+                    ],
+                    correcta: 1,
+                    explicacion: "HTML5 requiere DOCTYPE, html, head (con meta charset) y body."
+                }
+            ],
+            css: [
+                {
+                    pregunta: "¿Cuál es la propiedad CSS para cambiar el color del texto?",
+                    opciones: ["text-color", "color", "font-color", "foreground"],
+                    correcta: 1,
+                    explicacion: "La propiedad 'color' se usa para cambiar el color del texto en CSS."
+                },
+                {
+                    pregunta: "¿Qué hace la propiedad 'display: flex'?",
+                    opciones: [
+                        "Muestra y oculta elementos",
+                        "Activa flexbox para layout flexible",
+                        "Aumenta el tamaño del elemento",
+                        "Aplica un efecto de animación"
+                    ],
+                    correcta: 1,
+                    explicacion: "Flexbox es un modelo de layout moderno que facilita la alineación y distribución de elementos."
+                },
+                {
+                    pregunta: "¿Cuál es la diferencia entre 'margin' y 'padding'?",
+                    opciones: [
+                        "No hay diferencia",
+                        "margin es externo, padding es interno",
+                        "padding es externo, margin es interno",
+                        "Son lo mismo pero con nombres diferentes"
+                    ],
+                    correcta: 1,
+                    explicacion: "Margin es el espacio FUERA del elemento, padding es el espacio DENTRO."
+                },
+                {
+                    pregunta: "¿Cuál es la especificidad correcta de estos selectores?",
+                    opciones: [
+                        "element = class = id",
+                        "id > class > element",
+                        "class > id > element",
+                        "element > class > id"
+                    ],
+                    correcta: 1,
+                    explicacion: "La especificidad: ID (100) > CLASS (10) > ELEMENT (1). ID tiene mayor prioridad."
+                },
+                {
+                    pregunta: "¿Cuál es la propiedad para hacer un elemento redondeado?",
+                    opciones: ["round-corners", "border-radius", "corner-radius", "radius"],
+                    correcta: 1,
+                    explicacion: "La propiedad 'border-radius' crea bordes redondeados en CSS3."
+                }
+            ]
+        };
+
         /* ============== VARIABLES GLOBALES ============== */
-        let alarmaActiva = false;
-        let horaAlarma = null;
-        let alarmaEnSonando = false;
-        let audioContext = null;
-        let oscillator = null;
-        let gainNode = null;
+        let categoriaActual = 'javascript';
+        let preguntasActuales = [];
+        let preguntaIndex = 0;
+        let puntuacion = 0;
+        let respuestaSeleccionada = false;
 
-        /* ============== NOMBRES DE MESES Y DÍAS ============== */
-        const meses = [
-            'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
-            'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'
-        ];
-
-        const dias = [
-            'domingo', 'lunes', 'martes', 'miércoles', 
-            'jueves', 'viernes', 'sábado'
-        ];
+        /* ============== FUNCIONES DE UTILIDAD ============== */
 
         /**
-         * Formatea un número agregando un cero a la izquierda si es necesario
-         * @param {number} numero - Número a formatear
-         * @returns {string} Número formateado con 2 dígitos
+         * Obtiene las preguntas según la categoría seleccionada
+         * @param {string} categoria - Categoría seleccionada
          */
-        function formatearNumero(numero) {
-            return numero < 10 ? '0' + numero : numero;
+        function cargarPreguntas(categoria) {
+            categoriaActual = categoria;
+            preguntasActuales = [...preguntasPorCategoria[categoria]];
+            preguntaIndex = 0;
+            puntuacion = 0;
         }
 
         /**
-         * Obtiene la hora actual en formato HH:MM:SS
-         * @returns {string} Hora formateada
+         * Calcula el porcentaje de aciertos
+         * @returns {number} Porcentaje redondeado
          */
-        function obtenerHoraActual() {
-            const ahora = new Date();
-            const horas = formatearNumero(ahora.getHours());
-            const minutos = formatearNumero(ahora.getMinutes());
-            const segundos = formatearNumero(ahora.getSeconds());
-
-            return `${horas}:${minutos}:${segundos}`;
+        function calcularPorcentaje() {
+            return Math.round((puntuacion / preguntasActuales.length) * 100);
         }
 
         /**
-         * Obtiene la fecha actual en formato español
-         * @returns {string} Fecha formateada (ej: "Lunes, 01 de enero de 2025")
+         * Obtiene el mensaje según el desempeño
+         * @returns {object} Objeto con mensaje y clase CSS
          */
-        function obtenerFechaActual() {
-            const ahora = new Date();
-            const dia = dias[ahora.getDay()];
-            const numeroDia = formatearNumero(ahora.getDate());
-            const mes = meses[ahora.getMonth()];
-            const año = ahora.getFullYear();
+        function obtenerMensajeDesempenio() {
+            const porcentaje = calcularPorcentaje();
 
-            // Capitalizar el primer carácter del día
-            const diaCapitalizado = dia.charAt(0).toUpperCase() + dia.slice(1);
-
-            return `${diaCapitalizado}, ${numeroDia} de ${mes} de ${año}`;
-        }
-
-        /**
-         * Obtiene la hora actual en formato HH:MM (sin segundos)
-         * @returns {string} Hora formateada (ej: "14:30")
-         */
-        function obtenerHoraActualSinSegundos() {
-            const ahora = new Date();
-            const horas = formatearNumero(ahora.getHours());
-            const minutos = formatearNumero(ahora.getMinutes());
-
-            return `${horas}:${minutos}`;
-        }
-
-        /**
-         * Actualiza el reloj y la fecha en la pantalla
-         * - Se ejecuta cada segundo vía setInterval
-         * - Actualiza el display digital
-         */
-        function actualizarReloj() {
-            // Obtener hora y fecha actual
-            const horaActual = obtenerHoraActual();
-            const fechaActual = obtenerFechaActual();
-
-            // Actualizar elementos en el HTML
-            document.getElementById('clockDisplay').textContent = horaActual;
-            document.getElementById('dateDisplay').textContent = fechaActual;
-
-            // Verificar si la alarma debe sonar
-            if (alarmaActiva && !alarmaEnSonando) {
-                verificarAlarma();
+            if (porcentaje >= 80) {
+                return {
+                    texto: "🎉 ¡Excelente! Dominas este tema perfectamente.",
+                    clase: "excelente"
+                };
+            } else if (porcentaje >= 60) {
+                return {
+                    texto: "👍 ¡Bien hecho! Tienes una buena comprensión del tema.",
+                    clase: "bien"
+                };
+            } else {
+                return {
+                    texto: "📚 Puedes mejorar. Revisa los conceptos y vuelve a intentar.",
+                    clase: "mejorar"
+                };
             }
         }
 
-        /**
-         * Verifica si la hora actual coincide con la hora de la alarma
-         * Si coincide, activa la alarma
-         */
-        function verificarAlarma() {
-            // Obtener hora actual sin segundos (para comparación)
-            const horaActual = obtenerHoraActualSinSegundos();
+        /* ============== FUNCIONES DE PANTALLA ============== */
 
-            // Comparar con la hora de la alarma
-            if (horaActual === horaAlarma) {
-                activarAlarma();
+        /**
+         * Muestra la pantalla de inicio
+         */
+        function mostrarInicio() {
+            document.getElementById('inicioScreen').style.display = 'block';
+            document.getElementById('quizScreen').style.display = 'none';
+            document.getElementById('resultadosScreen').style.display = 'none';
+        }
+
+        /**
+         * Muestra la pantalla de quiz
+         */
+        function mostrarQuiz() {
+            document.getElementById('inicioScreen').style.display = 'none';
+            document.getElementById('quizScreen').style.display = 'block';
+            document.getElementById('resultadosScreen').style.display = 'none';
+
+            mostrarPregunta();
+        }
+
+        /**
+         * Muestra la pantalla de resultados
+         */
+        function mostrarResultados() {
+            document.getElementById('inicioScreen').style.display = 'none';
+            document.getElementById('quizScreen').style.display = 'none';
+            document.getElementById('resultadosScreen').style.display = 'block';
+
+            // Actualizar información de resultados
+            document.getElementById('puntuacionNumero').textContent = puntuacion;
+            document.getElementById('puntuacionTotal').textContent = `de ${preguntasActuales.length}`;
+
+            const porcentaje = calcularPorcentaje();
+            document.getElementById('porcentajeTexto').textContent = `${porcentaje}%`;
+
+            const mensaje = obtenerMensajeDesempenio();
+            const elementoMensaje = document.getElementById('mensajeDesempenio');
+            elementoMensaje.textContent = mensaje.texto;
+            elementoMensaje.className = `mensaje-desempenio ${mensaje.clase}`;
+        }
+
+        /**
+         * Muestra la pregunta actual en pantalla
+         * - Actualiza el número de pregunta
+         * - Actualiza la barra de progreso
+         * - Muestra el texto de la pregunta
+         * - Muestra los botones de opciones
+         */
+        function mostrarPregunta() {
+            const pregunta = preguntasActuales[preguntaIndex];
+            respuestaSeleccionada = false;
+
+            // Actualizar contador
+            document.getElementById('contadorPregunta').textContent = 
+                `Pregunta ${preguntaIndex + 1} de ${preguntasActuales.length}`;
+
+            // Actualizar barra de progreso
+            const porcentajeProgreso = ((preguntaIndex + 1) / preguntasActuales.length) * 100;
+            document.getElementById('progressFill').style.width = porcentajeProgreso + '%';
+
+            // Mostrar pregunta
+            document.getElementById('preguntaTexto').textContent = pregunta.pregunta;
+
+            // Limpiar feedback
+            const feedbackElement = document.getElementById('feedback');
+            feedbackElement.classList.remove('visible', 'correcta', 'incorrecta');
+
+            // Mostrar opciones
+            const contenedorOpciones = document.getElementById('opcionesContainer');
+            contenedorOpciones.innerHTML = '';
+
+            pregunta.opciones.forEach((opcion, index) => {
+                const boton = document.createElement('button');
+                boton.className = 'opcion-btn';
+                boton.textContent = opcion;
+                boton.dataset.index = index;
+                boton.addEventListener('click', () => verificarRespuesta(index, boton));
+                contenedorOpciones.appendChild(boton);
+            });
+        }
+
+        /**
+         * Verifica si la respuesta seleccionada es correcta
+         * - Valida la respuesta
+         * - Muestra feedback visual
+         * - Habilita el siguiente
+         * - Muestra la siguiente pregunta con delay
+         * 
+         * @param {number} indexSeleccionado - Índice de la opción seleccionada
+         * @param {element} botón - Elemento del botón clickeado
+         */
+        function verificarRespuesta(indexSeleccionado, boton) {
+            if (respuestaSeleccionada) return; // Evitar múltiples respuestas
+
+            respuestaSeleccionada = true;
+            const pregunta = preguntasActuales[preguntaIndex];
+            const esCorrecta = indexSeleccionado === pregunta.correcta;
+
+            // Desactivar todos los botones
+            document.querySelectorAll('.opcion-btn').forEach(btn => {
+                btn.disabled = true;
+            });
+
+            // Mostrar respuesta correcta
+            const botonesOpciones = document.querySelectorAll('.opcion-btn');
+            botonesOpciones[pregunta.correcta].classList.add('correcta');
+
+            // Si es incorrecta, mostrar la seleccionada como incorrecta
+            if (!esCorrecta) {
+                boton.classList.add('incorrecta');
+            } else {
+                puntuacion++;
             }
-        }
 
-        /**
-         * Activa la alarma:
-         * - Muestra notificación visual
-         * - Reproduce sonido (simulado con alert)
-         * - Marca la alarma como sonando
-         */
-        function activarAlarma() {
-            alarmaEnSonando = true;
-            console.log(`¡ALARMA SONANDO! - Hora: ${horaAlarma}`);
+            // Mostrar feedback
+            const feedbackElement = document.getElementById('feedback');
+            feedbackElement.textContent = esCorrecta ? 
+                `✅ ¡Correcto! ${pregunta.explicacion}` : 
+                `❌ Incorrecto. ${pregunta.explicacion}`;
+            feedbackElement.className = `feedback visible ${esCorrecta ? 'correcta' : 'incorrecta'}`;
 
-            // Mostrar notificación visual
-            const notificacion = document.getElementById('alarmNotification');
-            notificacion.classList.add('alarm-ringing');
-            notificacion.style.display = 'flex';
-            notificacion.style.flexDirection = 'column';
-            notificacion.style.justifyContent = 'center';
-            notificacion.style.alignItems = 'center';
+            // Siguiente pregunta con delay
+            setTimeout(() => {
+                preguntaIndex++;
 
-            // Reproducir sonido (simulado)
-            reproducirSonidoAlarma();
-
-            // Permitir detener la alarma al hacer clic
-            notificacion.addEventListener('click', detenerAlarma, { once: true });
-        }
-
-        /**
-         * Reproduce un sonido de alarma zumbante y fuerte
-         * Usa Web Audio API para generar un tono sinusoidal
-         */
-        function reproducirSonidoAlarma() {
-            try {
-                // Crear contexto de audio si no existe
-                if (!audioContext) {
-                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                if (preguntaIndex < preguntasActuales.length) {
+                    mostrarPregunta();
+                } else {
+                    mostrarResultados();
                 }
-
-                // Reanudar contexto si está suspendido
-                if (audioContext.state === 'suspended') {
-                    audioContext.resume();
-                }
-
-                // Crear nodos de audio
-                oscillator = audioContext.createOscillator();
-                gainNode = audioContext.createGain();
-
-                // Configurar oscilador (onda sinusoidal)
-                oscillator.type = 'sine';
-                oscillator.frequency.value = 800; // Frecuencia inicial en Hz
-
-                // Configurar ganancia (volumen fuerte)
-                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-
-                // Conectar nodos
-                oscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
-
-                // Iniciar oscilador
-                oscillator.start(audioContext.currentTime);
-
-                // Crear efecto de zumbido variando la frecuencia
-                const now = audioContext.currentTime;
-                oscillator.frequency.setValueAtTime(800, now);
-                oscillator.frequency.linearRampToValueAtTime(600, now + 0.1);
-                oscillator.frequency.linearRampToValueAtTime(800, now + 0.2);
-
-                console.log('🔔 Sonido de alarma reproducido');
-            } catch (error) {
-                console.error('Error al reproducir sonido:', error);
-                // Fallback: vibración
-                if (navigator.vibrate) {
-                    navigator.vibrate([200, 100, 200, 100, 200, 100]);
-                }
-            }
-        }
-
-        /**
-         * Detiene el sonido de alarma
-         */
-        function detenerSonidoAlarma() {
-            try {
-                if (oscillator && audioContext) {
-                    oscillator.stop(audioContext.currentTime);
-                    oscillator = null;
-                    gainNode = null;
-                }
-            } catch (error) {
-                console.error('Error al detener sonido:', error);
-            }
-        }
-
-        /**
-         * Detiene la alarma:
-         * - Oculta la notificación
-         * - Desactiva la bandera de alarma sonando
-         * - La alarma se puede volver a activar el próximo minuto
-         */
-        function detenerAlarma() {
-            alarmaEnSonando = false;
-
-            // Detener el sonido
-            detenerSonidoAlarma();
-
-            const notificacion = document.getElementById('alarmNotification');
-            notificacion.classList.remove('alarm-ringing');
-            notificacion.style.display = 'none';
-
-            console.log('✓ Alarma detenida');
-        }
-
-        /**
-         * Establece una nueva alarma
-         * - Obtiene la hora del input
-         * - Valida que sea una hora futura
-         * - Activa el indicador de alarma
-         * - Habilita/deshabilita botones según corresponda
-         */
-        function establecerAlarma() {
-            const inputAlarma = document.getElementById('alarmTime').value;
-
-            // Validar que se haya seleccionado una hora
-            if (!inputAlarma) {
-                alert('Por favor selecciona una hora');
-                return;
-            }
-
-            // Obtener hora actual sin segundos
-            const horaActual = obtenerHoraActualSinSegundos();
-
-            // Validar que la alarma sea para el futuro (misma hora o después)
-            if (inputAlarma < horaActual) {
-                alert('La alarma debe ser a una hora futura.\nLa alarma sonará mañana a esa hora.');
-            }
-
-            // Guardar la hora de alarma
-            horaAlarma = inputAlarma;
-            alarmaActiva = true;
-            alarmaEnSonando = false;
-
-            // Actualizar interfaz
-            document.getElementById('alarmTimeDisplay').textContent = horaAlarma;
-            document.getElementById('alarmStatus').classList.add('active');
-            document.getElementById('setAlarmBtn').disabled = true;
-            document.getElementById('cancelAlarmBtn').disabled = false;
-            document.getElementById('alarmTime').disabled = true;
-
-            console.log(`✓ Alarma establecida para las ${horaAlarma}`);
-        }
-
-        /**
-         * Cancela la alarma activa:
-         * - Desactiva el indicador de alarma
-         * - Limpia la hora guardada
-         * - Detiene la alarma si está sonando
-         * - Habilita/deshabilita botones según corresponda
-         */
-        function cancelarAlarma() {
-            // Detener la alarma si está sonando
-            if (alarmaEnSonando) {
-                detenerAlarma();
-            }
-
-            // Limpiar datos
-            alarmaActiva = false;
-            horaAlarma = null;
-            alarmaEnSonando = false;
-
-            // Actualizar interfaz
-            document.getElementById('alarmStatus').classList.remove('active');
-            document.getElementById('setAlarmBtn').disabled = false;
-            document.getElementById('cancelAlarmBtn').disabled = true;
-            document.getElementById('alarmTime').disabled = false;
-            document.getElementById('alarmTime').value = '';
-
-            console.log('✓ Alarma cancelada');
+            }, 2500); // Esperar 2.5 segundos antes de siguiente pregunta
         }
 
         /* ============== EVENT LISTENERS ============== */
 
-        // Botón para establecer alarma
-        document.getElementById('setAlarmBtn').addEventListener('click', establecerAlarma);
+        // Botón Comenzar
+        document.getElementById('btnComenzar').addEventListener('click', () => {
+            const categoriaSelect = document.getElementById('categoriaSelect').value;
+            cargarPreguntas(categoriaSelect);
+            mostrarQuiz();
+        });
 
-        // Botón para cancelar alarma
-        document.getElementById('cancelAlarmBtn').addEventListener('click', cancelarAlarma);
+        // Botón Reintentar
+        document.getElementById('btnReintentar').addEventListener('click', () => {
+            cargarPreguntas(categoriaActual);
+            mostrarQuiz();
+        });
 
-        // Permitir establecer alarma al presionar Enter
-        document.getElementById('alarmTime').addEventListener('keypress', (event) => {
-            if (event.key === 'Enter') {
-                establecerAlarma();
-            }
+        // Botón Ir al Inicio
+        document.getElementById('btnHome').addEventListener('click', () => {
+            mostrarInicio();
         });
 
         /* ============== INICIALIZACIÓN ============== */
-
-        // Actualizar reloj inmediatamente
-        actualizarReloj();
-
-        // Actualizar reloj cada segundo (cada 1000ms)
-        setInterval(actualizarReloj, 1000);
-
-        console.log('✓ Reloj digital inicializado correctamente');
+        mostrarInicio();
+        console.log('✓ Quiz inicializado correctamente');
     </script>
 </body>
 </html>
