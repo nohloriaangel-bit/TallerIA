@@ -3,17 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conversor de Temperaturas</title>
+    <title>Reloj Digital con Alarma</title>
     <style>
+        /* Resetear estilos por defecto */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        /* Fondo del body */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -21,251 +23,678 @@
             padding: 20px;
         }
 
+        /* Contenedor principal */
         .container {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            background: #0f3460;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 0 30px rgba(16, 185, 129, 0.1);
             padding: 40px;
-            max-width: 500px;
+            max-width: 700px;
             width: 100%;
+            border: 2px solid #10b981;
         }
 
+        /* Título */
         h1 {
+            color: #10b981;
             text-align: center;
-            color: #333;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             font-size: 28px;
+            text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+            letter-spacing: 2px;
         }
 
-        .input-group {
-            margin-bottom: 25px;
+        /* Sección del reloj */
+        .clock-section {
+            background: #0a1929;
+            border: 2px solid #10b981;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: inset 0 0 20px rgba(16, 185, 129, 0.1);
         }
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #555;
+        /* Display del reloj - efecto digital */
+        .clock-display {
+            font-size: 80px;
+            font-weight: bold;
+            color: #10b981;
+            text-align: center;
+            text-shadow: 0 0 20px rgba(16, 185, 129, 0.8);
+            font-family: 'Courier New', monospace;
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Display de la fecha */
+        .date-display {
+            font-size: 18px;
+            color: #60a5fa;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(96, 165, 250, 0.5);
+            letter-spacing: 1px;
             font-weight: 600;
-            font-size: 14px;
         }
 
-        input {
-            width: 100%;
+        /* Sección de alarma */
+        .alarm-section {
+            background: #0a1929;
+            border: 2px solid #f59e0b;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: inset 0 0 20px rgba(245, 158, 11, 0.05);
+        }
+
+        /* Título de sección */
+        .alarm-section h2 {
+            color: #f59e0b;
+            font-size: 20px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+            letter-spacing: 1px;
+        }
+
+        /* Grupo de entrada */
+        .input-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* Input time */
+        input[type="time"] {
             padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
             font-size: 16px;
-            transition: border-color 0.3s;
+            background: #1e293b;
+            color: #10b981;
+            border: 2px solid #f59e0b;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            flex: 1;
+            min-width: 150px;
         }
 
-        input:focus {
+        input[type="time"]:focus {
             outline: none;
-            border-color: #667eea;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.6);
         }
 
+        /* Estilos de botones */
         button {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
             border: none;
             border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin-bottom: 25px;
+            transition: all 0.3s ease;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
         }
 
-        button:hover {
+        /* Botón Establecer Alarma */
+        #setAlarmBtn {
+            background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+            color: #0a1929;
+            box-shadow: 0 5px 15px rgba(245, 158, 11, 0.4);
+            flex: 0.5;
+            min-width: 140px;
+        }
+
+        #setAlarmBtn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.6);
         }
 
-        button:active {
+        #setAlarmBtn:active {
             transform: translateY(0);
         }
 
-        .results {
-            background: #f8f9fa;
+        /* Botón Cancelar Alarma */
+        #cancelAlarmBtn {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
+            flex: 0.5;
+            min-width: 140px;
+        }
+
+        #cancelAlarmBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.6);
+        }
+
+        #cancelAlarmBtn:active {
+            transform: translateY(0);
+        }
+
+        /* Estado del botón deshabilitado */
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Indicador de alarma activa */
+        .alarm-status {
+            background: #1e293b;
+            border: 2px solid #10b981;
             border-radius: 8px;
-            padding: 20px;
+            padding: 15px;
+            text-align: center;
+            margin-top: 20px;
+            color: #10b981;
+            font-size: 16px;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
             display: none;
         }
 
-        .results.visible {
+        .alarm-status.active {
             display: block;
+            animation: pulse 1s infinite;
         }
 
-        .result-item {
-            background: white;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 6px;
-            border-left: 4px solid #667eea;
+        /* Animación de pulso */
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                border-color: #10b981;
+                box-shadow: inset 0 0 10px rgba(16, 185, 129, 0.3);
+            }
+            50% {
+                opacity: 0.7;
+                border-color: #34d399;
+                box-shadow: inset 0 0 20px rgba(16, 185, 129, 0.5);
+            }
         }
 
-        .result-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .result-label {
-            color: #666;
-            font-size: 13px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 5px;
-        }
-
-        .result-value {
-            color: #333;
+        /* Área de notificación de alarma */
+        .alarm-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: #ef4444;
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(239, 68, 68, 0.8);
+            z-index: 1000;
+            text-align: center;
             font-size: 24px;
             font-weight: 700;
-        }
-
-        .error {
-            background: #fee;
-            border-left-color: #e74c3c;
-            color: #c0392b;
-            padding: 15px;
-            border-radius: 6px;
+            border: 3px solid #dc2626;
+            animation: alarmFadeIn 0.3s ease forwards;
             display: none;
-            margin-top: 15px;
         }
 
-        .error.visible {
-            display: block;
+        .alarm-notification.alarm-ringing {
+            animation: alarmRinging 0.5s infinite;
         }
 
+        /* Animación de entrada de alarma */
+        @keyframes alarmFadeIn {
+            to {
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        /* Animación de parpadeo de alarma */
+        @keyframes alarmRinging {
+            0%, 100% {
+                background: #ef4444;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% {
+                background: #dc2626;
+                transform: translate(-50%, -50%) scale(1.05);
+            }
+        }
+
+        /* Indicador LED de alarma */
+        .alarm-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: #ef4444;
+            border-radius: 50%;
+            margin-right: 8px;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.8);
+            animation: ledBlink 1s infinite;
+        }
+
+        .alarm-indicator.inactive {
+            background: #6b7280;
+            box-shadow: none;
+            animation: none;
+        }
+
+        /* Animación de LED */
+        @keyframes ledBlink {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        /* Información */
         .info {
-            background: #eef5ff;
-            border-left: 4px solid #3498db;
+            background: #1e293b;
+            border-left: 4px solid #3b82f6;
             padding: 15px;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 13px;
-            color: #2c3e50;
+            color: #60a5fa;
             margin-top: 20px;
             line-height: 1.6;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 22px;
+                margin-bottom: 25px;
+            }
+
+            .clock-display {
+                font-size: 50px;
+                letter-spacing: 3px;
+                margin-bottom: 15px;
+            }
+
+            .date-display {
+                font-size: 14px;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            input[type="time"] {
+                min-width: 100%;
+                flex: unset;
+            }
+
+            #setAlarmBtn,
+            #cancelAlarmBtn {
+                flex: 1;
+                min-width: 100%;
+            }
+
+            .alarm-notification {
+                padding: 30px;
+                font-size: 18px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🌡️ Conversor de Temperaturas</h1>
-        
-        <div class="input-group">
-            <label for="celsius">Ingresa la temperatura en Celsius (°C)</label>
-            <input 
-                type="number" 
-                id="celsius" 
-                placeholder="Ejemplo: 25" 
-                step="0.01"
-            >
+        <h1>⏰ RELOJ DIGITAL CON ALARMA</h1>
+
+        <!-- Sección del reloj -->
+        <div class="clock-section">
+            <!-- Display del reloj -->
+            <div class="clock-display" id="clockDisplay">00:00:00</div>
+
+            <!-- Display de la fecha -->
+            <div class="date-display" id="dateDisplay">Lunes, 01 de enero de 2025</div>
         </div>
 
-        <button onclick="convertir()">Convertir</button>
+        <!-- Sección de alarma -->
+        <div class="alarm-section">
+            <h2>⏲️ CONFIGURAR ALARMA</h2>
 
-        <div class="error" id="error"></div>
+            <div class="input-group">
+                <input 
+                    type="time" 
+                    id="alarmTime" 
+                    placeholder="HH:MM"
+                    title="Selecciona la hora de la alarma"
+                >
+                <button id="setAlarmBtn">Establecer Alarma</button>
+                <button id="cancelAlarmBtn" disabled>Cancelar Alarma</button>
+            </div>
 
-        <div class="results" id="resultados">
-            <div class="result-item">
-                <div class="result-label">Celsius (°C)</div>
-                <div class="result-value" id="resultCelsius">-</div>
+            <!-- Indicador de alarma activa -->
+            <div class="alarm-status" id="alarmStatus">
+                <span class="alarm-indicator"></span>
+                ALARMA ACTIVA - Suena a las <span id="alarmTimeDisplay">--:--</span>
             </div>
-            <div class="result-item">
-                <div class="result-label">Fahrenheit (°F)</div>
-                <div class="result-value" id="resultFahrenheit">-</div>
-            </div>
-            <div class="result-item">
-                <div class="result-label">Kelvin (K)</div>
-                <div class="result-value" id="resultKelvin">-</div>
-            </div>
-        </div>
 
-        <div class="info">
-            <strong>📌 Fórmulas utilizadas:</strong><br>
-            • Fahrenheit: (°C × 9/5) + 32<br>
-            • Kelvin: °C + 273.15
+            <!-- Información -->
+            <div class="info">
+                <strong>📌 Cómo usar:</strong><br>
+                1. Selecciona una hora en el campo de tiempo<br>
+                2. Haz clic en "Establecer Alarma"<br>
+                3. La alarma sonará cuando la hora actual coincida<br>
+                4. Puedes cancelarla en cualquier momento
+            </div>
         </div>
     </div>
 
+    <!-- Notificación de alarma -->
+    <div class="alarm-notification" id="alarmNotification">
+        🔔 ¡¡ALARMA SONANDO!! 🔔<br>
+        <span style="font-size: 16px; margin-top: 10px; display: block;">Haz clic para detener</span>
+    </div>
+
     <script>
+        /* ============== VARIABLES GLOBALES ============== */
+        let alarmaActiva = false;
+        let horaAlarma = null;
+        let alarmaEnSonando = false;
+        let audioContext = null;
+        let oscillator = null;
+        let gainNode = null;
+
+        /* ============== NOMBRES DE MESES Y DÍAS ============== */
+        const meses = [
+            'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
+            'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'
+        ];
+
+        const dias = [
+            'domingo', 'lunes', 'martes', 'miércoles', 
+            'jueves', 'viernes', 'sábado'
+        ];
+
         /**
-         * Convierte una temperatura en Celsius a Fahrenheit y Kelvin
-         * @param {number} celsius - La temperatura en grados Celsius
-         * @returns {object} Objeto con las conversiones a Fahrenheit y Kelvin
+         * Formatea un número agregando un cero a la izquierda si es necesario
+         * @param {number} numero - Número a formatear
+         * @returns {string} Número formateado con 2 dígitos
          */
-        function convertirTemperatura(celsius) {
-            // Validar que el valor ingresado sea un número válido
-            if (typeof celsius !== 'number' || isNaN(celsius)) {
-                console.error('Por favor ingresa un número válido');
-                return null;
-            }
-
-            // Fórmula de conversión a Fahrenheit: (°C × 9/5) + 32
-            const fahrenheit = (celsius * 9 / 5) + 32;
-
-            // Fórmula de conversión a Kelvin: °C + 273.15
-            const kelvin = celsius + 273.15;
-
-            // Retornar un objeto con los tres valores (Celsius original + conversiones)
-            return {
-                celsius: celsius,
-                fahrenheit: Math.round(fahrenheit * 100) / 100, // Redondear a 2 decimales
-                kelvin: Math.round(kelvin * 100) / 100 // Redondear a 2 decimales
-            };
+        function formatearNumero(numero) {
+            return numero < 10 ? '0' + numero : numero;
         }
 
         /**
-         * Maneja el evento de conversión desde la interfaz
+         * Obtiene la hora actual en formato HH:MM:SS
+         * @returns {string} Hora formateada
          */
-        function convertir() {
-            const inputCelsius = document.getElementById('celsius').value;
-            const errorDiv = document.getElementById('error');
-            const resultadosDiv = document.getElementById('resultados');
+        function obtenerHoraActual() {
+            const ahora = new Date();
+            const horas = formatearNumero(ahora.getHours());
+            const minutos = formatearNumero(ahora.getMinutes());
+            const segundos = formatearNumero(ahora.getSeconds());
 
-            // Limpiar errores previos
-            errorDiv.classList.remove('visible');
-            errorDiv.textContent = '';
+            return `${horas}:${minutos}:${segundos}`;
+        }
 
-            // Validar que el input no esté vacío
-            if (inputCelsius.trim() === '') {
-                errorDiv.textContent = '⚠️ Por favor ingresa un valor';
-                errorDiv.classList.add('visible');
-                resultadosDiv.classList.remove('visible');
-                return;
-            }
+        /**
+         * Obtiene la fecha actual en formato español
+         * @returns {string} Fecha formateada (ej: "Lunes, 01 de enero de 2025")
+         */
+        function obtenerFechaActual() {
+            const ahora = new Date();
+            const dia = dias[ahora.getDay()];
+            const numeroDia = formatearNumero(ahora.getDate());
+            const mes = meses[ahora.getMonth()];
+            const año = ahora.getFullYear();
 
-            // Convertir el string a número
-            const celsius = parseFloat(inputCelsius);
+            // Capitalizar el primer carácter del día
+            const diaCapitalizado = dia.charAt(0).toUpperCase() + dia.slice(1);
 
-            // Validar que sea un número válido
-            if (isNaN(celsius)) {
-                errorDiv.textContent = '⚠️ El valor ingresado no es un número válido';
-                errorDiv.classList.add('visible');
-                resultadosDiv.classList.remove('visible');
-                return;
-            }
+            return `${diaCapitalizado}, ${numeroDia} de ${mes} de ${año}`;
+        }
 
-            // Llamar a la función de conversión
-            const resultado = convertirTemperatura(celsius);
+        /**
+         * Obtiene la hora actual en formato HH:MM (sin segundos)
+         * @returns {string} Hora formateada (ej: "14:30")
+         */
+        function obtenerHoraActualSinSegundos() {
+            const ahora = new Date();
+            const horas = formatearNumero(ahora.getHours());
+            const minutos = formatearNumero(ahora.getMinutes());
 
-            // Si la conversión fue exitosa, mostrar los resultados
-            if (resultado) {
-                document.getElementById('resultCelsius').textContent = resultado.celsius + ' °C';
-                document.getElementById('resultFahrenheit').textContent = resultado.fahrenheit + ' °F';
-                document.getElementById('resultKelvin').textContent = resultado.kelvin + ' K';
-                resultadosDiv.classList.add('visible');
+            return `${horas}:${minutos}`;
+        }
+
+        /**
+         * Actualiza el reloj y la fecha en la pantalla
+         * - Se ejecuta cada segundo vía setInterval
+         * - Actualiza el display digital
+         */
+        function actualizarReloj() {
+            // Obtener hora y fecha actual
+            const horaActual = obtenerHoraActual();
+            const fechaActual = obtenerFechaActual();
+
+            // Actualizar elementos en el HTML
+            document.getElementById('clockDisplay').textContent = horaActual;
+            document.getElementById('dateDisplay').textContent = fechaActual;
+
+            // Verificar si la alarma debe sonar
+            if (alarmaActiva && !alarmaEnSonando) {
+                verificarAlarma();
             }
         }
 
-        // Permitir convertir al presionar Enter
-        document.getElementById('celsius').addEventListener('keypress', function(event) {
+        /**
+         * Verifica si la hora actual coincide con la hora de la alarma
+         * Si coincide, activa la alarma
+         */
+        function verificarAlarma() {
+            // Obtener hora actual sin segundos (para comparación)
+            const horaActual = obtenerHoraActualSinSegundos();
+
+            // Comparar con la hora de la alarma
+            if (horaActual === horaAlarma) {
+                activarAlarma();
+            }
+        }
+
+        /**
+         * Activa la alarma:
+         * - Muestra notificación visual
+         * - Reproduce sonido (simulado con alert)
+         * - Marca la alarma como sonando
+         */
+        function activarAlarma() {
+            alarmaEnSonando = true;
+            console.log(`¡ALARMA SONANDO! - Hora: ${horaAlarma}`);
+
+            // Mostrar notificación visual
+            const notificacion = document.getElementById('alarmNotification');
+            notificacion.classList.add('alarm-ringing');
+            notificacion.style.display = 'flex';
+            notificacion.style.flexDirection = 'column';
+            notificacion.style.justifyContent = 'center';
+            notificacion.style.alignItems = 'center';
+
+            // Reproducir sonido (simulado)
+            reproducirSonidoAlarma();
+
+            // Permitir detener la alarma al hacer clic
+            notificacion.addEventListener('click', detenerAlarma, { once: true });
+        }
+
+        /**
+         * Reproduce un sonido de alarma zumbante y fuerte
+         * Usa Web Audio API para generar un tono sinusoidal
+         */
+        function reproducirSonidoAlarma() {
+            try {
+                // Crear contexto de audio si no existe
+                if (!audioContext) {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                }
+
+                // Reanudar contexto si está suspendido
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+
+                // Crear nodos de audio
+                oscillator = audioContext.createOscillator();
+                gainNode = audioContext.createGain();
+
+                // Configurar oscilador (onda sinusoidal)
+                oscillator.type = 'sine';
+                oscillator.frequency.value = 800; // Frecuencia inicial en Hz
+
+                // Configurar ganancia (volumen fuerte)
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+
+                // Conectar nodos
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+
+                // Iniciar oscilador
+                oscillator.start(audioContext.currentTime);
+
+                // Crear efecto de zumbido variando la frecuencia
+                const now = audioContext.currentTime;
+                oscillator.frequency.setValueAtTime(800, now);
+                oscillator.frequency.linearRampToValueAtTime(600, now + 0.1);
+                oscillator.frequency.linearRampToValueAtTime(800, now + 0.2);
+
+                console.log('🔔 Sonido de alarma reproducido');
+            } catch (error) {
+                console.error('Error al reproducir sonido:', error);
+                // Fallback: vibración
+                if (navigator.vibrate) {
+                    navigator.vibrate([200, 100, 200, 100, 200, 100]);
+                }
+            }
+        }
+
+        /**
+         * Detiene el sonido de alarma
+         */
+        function detenerSonidoAlarma() {
+            try {
+                if (oscillator && audioContext) {
+                    oscillator.stop(audioContext.currentTime);
+                    oscillator = null;
+                    gainNode = null;
+                }
+            } catch (error) {
+                console.error('Error al detener sonido:', error);
+            }
+        }
+
+        /**
+         * Detiene la alarma:
+         * - Oculta la notificación
+         * - Desactiva la bandera de alarma sonando
+         * - La alarma se puede volver a activar el próximo minuto
+         */
+        function detenerAlarma() {
+            alarmaEnSonando = false;
+
+            // Detener el sonido
+            detenerSonidoAlarma();
+
+            const notificacion = document.getElementById('alarmNotification');
+            notificacion.classList.remove('alarm-ringing');
+            notificacion.style.display = 'none';
+
+            console.log('✓ Alarma detenida');
+        }
+
+        /**
+         * Establece una nueva alarma
+         * - Obtiene la hora del input
+         * - Valida que sea una hora futura
+         * - Activa el indicador de alarma
+         * - Habilita/deshabilita botones según corresponda
+         */
+        function establecerAlarma() {
+            const inputAlarma = document.getElementById('alarmTime').value;
+
+            // Validar que se haya seleccionado una hora
+            if (!inputAlarma) {
+                alert('Por favor selecciona una hora');
+                return;
+            }
+
+            // Obtener hora actual sin segundos
+            const horaActual = obtenerHoraActualSinSegundos();
+
+            // Validar que la alarma sea para el futuro (misma hora o después)
+            if (inputAlarma < horaActual) {
+                alert('La alarma debe ser a una hora futura.\nLa alarma sonará mañana a esa hora.');
+            }
+
+            // Guardar la hora de alarma
+            horaAlarma = inputAlarma;
+            alarmaActiva = true;
+            alarmaEnSonando = false;
+
+            // Actualizar interfaz
+            document.getElementById('alarmTimeDisplay').textContent = horaAlarma;
+            document.getElementById('alarmStatus').classList.add('active');
+            document.getElementById('setAlarmBtn').disabled = true;
+            document.getElementById('cancelAlarmBtn').disabled = false;
+            document.getElementById('alarmTime').disabled = true;
+
+            console.log(`✓ Alarma establecida para las ${horaAlarma}`);
+        }
+
+        /**
+         * Cancela la alarma activa:
+         * - Desactiva el indicador de alarma
+         * - Limpia la hora guardada
+         * - Detiene la alarma si está sonando
+         * - Habilita/deshabilita botones según corresponda
+         */
+        function cancelarAlarma() {
+            // Detener la alarma si está sonando
+            if (alarmaEnSonando) {
+                detenerAlarma();
+            }
+
+            // Limpiar datos
+            alarmaActiva = false;
+            horaAlarma = null;
+            alarmaEnSonando = false;
+
+            // Actualizar interfaz
+            document.getElementById('alarmStatus').classList.remove('active');
+            document.getElementById('setAlarmBtn').disabled = false;
+            document.getElementById('cancelAlarmBtn').disabled = true;
+            document.getElementById('alarmTime').disabled = false;
+            document.getElementById('alarmTime').value = '';
+
+            console.log('✓ Alarma cancelada');
+        }
+
+        /* ============== EVENT LISTENERS ============== */
+
+        // Botón para establecer alarma
+        document.getElementById('setAlarmBtn').addEventListener('click', establecerAlarma);
+
+        // Botón para cancelar alarma
+        document.getElementById('cancelAlarmBtn').addEventListener('click', cancelarAlarma);
+
+        // Permitir establecer alarma al presionar Enter
+        document.getElementById('alarmTime').addEventListener('keypress', (event) => {
             if (event.key === 'Enter') {
-                convertir();
+                establecerAlarma();
             }
         });
+
+        /* ============== INICIALIZACIÓN ============== */
+
+        // Actualizar reloj inmediatamente
+        actualizarReloj();
+
+        // Actualizar reloj cada segundo (cada 1000ms)
+        setInterval(actualizarReloj, 1000);
+
+        console.log('✓ Reloj digital inicializado correctamente');
     </script>
 </body>
 </html>

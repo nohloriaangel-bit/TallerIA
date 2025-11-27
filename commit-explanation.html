@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>¿Qué es un commit y por qué es importante?</title>
+    <style>
+      :root{
+        --bg1: #f7f9fc;
+        --bg2: #eef6f9;
+        --card: #ffffff;
+        --muted: #6b7280;
+        --accent: #6b9bd1;
+        --glass: rgba(255,255,255,0.7);
+        --radius: 14px;
+        --shadow: 0 8px 30px rgba(19, 38, 67, 0.08);
+      }
+      *{box-sizing:border-box}
+      html,body{height:100%}
+      body{
+        margin:0;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        background: linear-gradient(135deg,var(--bg1),var(--bg2));
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        padding:40px;
+        -webkit-font-smoothing:antialiased;
+        color:#0f172a;
+      }
+      .card{
+        width:100%;
+        max-width:900px;
+        background: linear-gradient(180deg,var(--card),var(--glass));
+        border-radius:var(--radius);
+        box-shadow:var(--shadow);
+        padding:28px;
+        transform:translateY(8px);
+        opacity:0;
+        animation:fadeUp 700ms cubic-bezier(.2,.9,.3,1) forwards;
+      }
+      @keyframes fadeUp{
+        to{opacity:1;transform:none}
+      }
+      h1{margin:0 0 8px;font-size:20px}
+      p.lead{margin:0 0 18px;color:var(--muted)}
+      ul{margin:12px 0 18px;padding-left:20px}
+      li{margin:8px 0;color:#0b1220}
+      .muted{color:var(--muted);font-size:14px}
+      pre{
+        background:linear-gradient(90deg,#f4f8fb,#eef6fb);
+        padding:12px;border-radius:10px;overflow:auto;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;font-size:13px;color:#08324a;
+      }
+      .chip{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(107,155,209,0.12);color:var(--accent);font-weight:600;font-size:13px}
+      .commands{margin-top:12px}
+      .footer{display:flex;gap:12px;align-items:center;margin-top:18px}
+      .btn{
+        background:linear-gradient(180deg,var(--accent),#4d83b8);color:white;padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:600;box-shadow:0 6px 18px rgba(45,85,140,0.12);
+        transition:transform .18s ease,box-shadow .18s ease;
+      }
+      .btn:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(45,85,140,0.14)}
+      .small{font-size:13px;color:var(--muted)}
+      /* animate list items sequentially */
+      li{opacity:0;transform:translateX(-8px);animation:slideIn 420ms ease forwards}
+      li:nth-child(1){animation-delay:120ms}
+      li:nth-child(2){animation-delay:220ms}
+      li:nth-child(3){animation-delay:320ms}
+      li:nth-child(4){animation-delay:420ms}
+      @keyframes slideIn{to{opacity:1;transform:none}}
+      @media (prefers-reduced-motion: reduce){
+        .card, li{animation:none;opacity:1;transform:none}
+      }
+    </style>
+  </head>
+  <body>
+    <article class="card" role="article">
+      <div class="chip">Git • Commit</div>
+      <h1>¿Qué es un commit y por qué es importante?</h1>
+      <p class="lead">Un <strong>commit</strong> es una instantánea del estado del proyecto guardada en el historial de control de versiones (por ejemplo, Git). Registra los cambios realizados, quién los hizo y cuándo, junto con un mensaje descriptivo.</p>
+
+      <h2 class="small">Por qué es importante</h2>
+      <ul>
+        <li><strong>Preserva el historial:</strong> permite volver a versiones anteriores y entender la evolución del código.</li>
+        <li><strong>Facilita la colaboración:</strong> otros pueden ver, revisar y combinar cambios.</li>
+        <li><strong>Aísla cambios:</strong> commits pequeños y atómicos hacen más fácil detectar y corregir errores.</li>
+        <li><strong>Soporta buenas prácticas:</strong> revisiones de código, integración continua y trazabilidad de cambios.</li>
+      </ul>
+
+      <h2 class="small">Buenas prácticas breves</h2>
+      <ul>
+        <li>Hacer commits atómicos (una sola idea/funcionalidad).</li>
+        <li>Mensajes claros y descriptivos.</li>
+        <li>Ejecutar pruebas antes de commitear.</li>
+        <li>Staging selectivo (`git add` solo lo necesario).</li>
+      </ul>
+
+      <div class="commands">
+        <div class="small">Ejemplos de comandos:</div>
+        <pre>
+git add archivo.js
+git commit -m "Añade función sumar y entrada por consola"
+git commit --amend -m "Corrige mensaje del commit"
+git revert &lt;hash_del_commit&gt;
+        </pre>
+      </div>
+
+      <div class="footer">
+        <button class="btn" id="closeBtn">Cerrar tarjeta</button>
+        <div class="small">Archivo: <code>commit-explanation.html</code></div>
+      </div>
+    </article>
+
+    <script>
+      (function(){
+        const btn = document.getElementById('closeBtn');
+        btn.addEventListener('click', ()=>{
+          document.querySelector('.card').style.transition='transform .45s ease, opacity .45s ease';
+          document.querySelector('.card').style.transform='translateY(20px) scale(.98)';
+          document.querySelector('.card').style.opacity='0';
+          setTimeout(()=>{window.scrollTo({top:0,behavior:'smooth'})},500);
+        });
+      })();
+    </script>
+  </body>
+</html>
