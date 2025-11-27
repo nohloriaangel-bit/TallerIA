@@ -1,59 +1,271 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Calculadora — TallerIA</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor de Temperaturas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-bottom: 25px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .results {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            display: none;
+        }
+
+        .results.visible {
+            display: block;
+        }
+
+        .result-item {
+            background: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+        }
+
+        .result-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .result-label {
+            color: #666;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            color: #333;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .error {
+            background: #fee;
+            border-left-color: #e74c3c;
+            color: #c0392b;
+            padding: 15px;
+            border-radius: 6px;
+            display: none;
+            margin-top: 15px;
+        }
+
+        .error.visible {
+            display: block;
+        }
+
+        .info {
+            background: #eef5ff;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #2c3e50;
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+    </style>
 </head>
 <body>
-  <main class="app" role="main">
-    <section class="calculator" aria-label="Calculadora">
-      <header class="calc-header">
-        <h1 class="visually-hidden">Calculadora</h1>
-        <div class="theme-toggle">
-          <button id="btnToggleTheme" aria-pressed="false" aria-label="Alternar modo oscuro">🌙</button>
+    <div class="container">
+        <h1>🌡️ Conversor de Temperaturas</h1>
+        
+        <div class="input-group">
+            <label for="celsius">Ingresa la temperatura en Celsius (°C)</label>
+            <input 
+                type="number" 
+                id="celsius" 
+                placeholder="Ejemplo: 25" 
+                step="0.01"
+            >
         </div>
-      </header>
 
-      <div class="display" id="display" aria-live="polite">
-        <div id="historyPreview" class="history-preview" aria-hidden="true"></div>
-        <div id="result" class="result" role="textbox" aria-readonly="true">0</div>
-      </div>
+        <button onclick="convertir()">Convertir</button>
 
-      <div class="buttons" id="buttons" role="group" aria-label="Teclado de la calculadora">
-        <button class="btn wide" data-action="clear" aria-label="Limpiar todo">AC</button>
-        <button class="btn" data-action="delete" aria-label="Borrar último">←</button>
-        <button class="btn" data-action="percent" aria-label="Porcentaje">%</button>
-        <button class="btn op" data-action="operator" data-value="/" aria-label="Dividir">÷</button>
+        <div class="error" id="error"></div>
 
-        <button class="btn" data-action="number" data-value="7" aria-label="7">7</button>
-        <button class="btn" data-action="number" data-value="8" aria-label="8">8</button>
-        <button class="btn" data-action="number" data-value="9" aria-label="9">9</button>
-        <button class="btn op" data-action="operator" data-value="*" aria-label="Multiplicar">×</button>
+        <div class="results" id="resultados">
+            <div class="result-item">
+                <div class="result-label">Celsius (°C)</div>
+                <div class="result-value" id="resultCelsius">-</div>
+            </div>
+            <div class="result-item">
+                <div class="result-label">Fahrenheit (°F)</div>
+                <div class="result-value" id="resultFahrenheit">-</div>
+            </div>
+            <div class="result-item">
+                <div class="result-label">Kelvin (K)</div>
+                <div class="result-value" id="resultKelvin">-</div>
+            </div>
+        </div>
 
-        <button class="btn" data-action="number" data-value="4" aria-label="4">4</button>
-        <button class="btn" data-action="number" data-value="5" aria-label="5">5</button>
-        <button class="btn" data-action="number" data-value="6" aria-label="6">6</button>
-        <button class="btn op" data-action="operator" data-value="-" aria-label="Restar">−</button>
+        <div class="info">
+            <strong>📌 Fórmulas utilizadas:</strong><br>
+            • Fahrenheit: (°C × 9/5) + 32<br>
+            • Kelvin: °C + 273.15
+        </div>
+    </div>
 
-        <button class="btn" data-action="number" data-value="1" aria-label="1">1</button>
-        <button class="btn" data-action="number" data-value="2" aria-label="2">2</button>
-        <button class="btn" data-action="number" data-value="3" aria-label="3">3</button>
-        <button class="btn op" data-action="operator" data-value="+" aria-label="Sumar">+</button>
+    <script>
+        /**
+         * Convierte una temperatura en Celsius a Fahrenheit y Kelvin
+         * @param {number} celsius - La temperatura en grados Celsius
+         * @returns {object} Objeto con las conversiones a Fahrenheit y Kelvin
+         */
+        function convertirTemperatura(celsius) {
+            // Validar que el valor ingresado sea un número válido
+            if (typeof celsius !== 'number' || isNaN(celsius)) {
+                console.error('Por favor ingresa un número válido');
+                return null;
+            }
 
-        <button class="btn wide" data-action="number" data-value="0" aria-label="0">0</button>
-        <button class="btn" data-action="decimal" aria-label="Decimal">.</button>
-        <button class="btn equal" data-action="equals" aria-label="Igual">=</button>
-      </div>
+            // Fórmula de conversión a Fahrenheit: (°C × 9/5) + 32
+            const fahrenheit = (celsius * 9 / 5) + 32;
 
-      <aside class="history" aria-label="Historial de operaciones">
-        <h2 class="visually-hidden">Historial</h2>
-        <ul id="historyList" class="history-list" aria-live="polite"></ul>
-      </aside>
-    </section>
-  </main>
+            // Fórmula de conversión a Kelvin: °C + 273.15
+            const kelvin = celsius + 273.15;
 
-  <script src="calculadora.js"></script>
+            // Retornar un objeto con los tres valores (Celsius original + conversiones)
+            return {
+                celsius: celsius,
+                fahrenheit: Math.round(fahrenheit * 100) / 100, // Redondear a 2 decimales
+                kelvin: Math.round(kelvin * 100) / 100 // Redondear a 2 decimales
+            };
+        }
+
+        /**
+         * Maneja el evento de conversión desde la interfaz
+         */
+        function convertir() {
+            const inputCelsius = document.getElementById('celsius').value;
+            const errorDiv = document.getElementById('error');
+            const resultadosDiv = document.getElementById('resultados');
+
+            // Limpiar errores previos
+            errorDiv.classList.remove('visible');
+            errorDiv.textContent = '';
+
+            // Validar que el input no esté vacío
+            if (inputCelsius.trim() === '') {
+                errorDiv.textContent = '⚠️ Por favor ingresa un valor';
+                errorDiv.classList.add('visible');
+                resultadosDiv.classList.remove('visible');
+                return;
+            }
+
+            // Convertir el string a número
+            const celsius = parseFloat(inputCelsius);
+
+            // Validar que sea un número válido
+            if (isNaN(celsius)) {
+                errorDiv.textContent = '⚠️ El valor ingresado no es un número válido';
+                errorDiv.classList.add('visible');
+                resultadosDiv.classList.remove('visible');
+                return;
+            }
+
+            // Llamar a la función de conversión
+            const resultado = convertirTemperatura(celsius);
+
+            // Si la conversión fue exitosa, mostrar los resultados
+            if (resultado) {
+                document.getElementById('resultCelsius').textContent = resultado.celsius + ' °C';
+                document.getElementById('resultFahrenheit').textContent = resultado.fahrenheit + ' °F';
+                document.getElementById('resultKelvin').textContent = resultado.kelvin + ' K';
+                resultadosDiv.classList.add('visible');
+            }
+        }
+
+        // Permitir convertir al presionar Enter
+        document.getElementById('celsius').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                convertir();
+            }
+        });
+    </script>
 </body>
 </html>
