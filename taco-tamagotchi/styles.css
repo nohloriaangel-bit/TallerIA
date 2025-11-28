@@ -1,0 +1,200 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    max-width: 500px;
+    width: 100%;
+}
+
+h1 {
+    text-align: center;
+    color: white;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    font-size: 2.5em;
+}
+
+.game-area {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.cat-display {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.taco-face {
+    font-size: 120px;
+    animation: bounce 0.6s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+.response-box {
+    background: #f0f0f0;
+    border-left: 4px solid #667eea;
+    padding: 15px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#tacoResponse {
+    font-size: 1.1em;
+    color: #333;
+    font-weight: bold;
+    text-align: center;
+}
+
+.stats {
+    margin-bottom: 30px;
+}
+
+.stat {
+    margin-bottom: 15px;
+}
+
+.stat label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+    font-size: 0.95em;
+}
+
+.stat-bar {
+    background: #e0e0e0;
+    border-radius: 10px;
+    height: 25px;
+    overflow: hidden;
+    position: relative;
+}
+
+.stat-fill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 8px;
+    color: white;
+    font-size: 0.85em;
+    font-weight: bold;
+}
+
+.stat-fill.hambre {
+    background: linear-gradient(90deg, #ff6b6b, #ff8e72);
+}
+
+.stat-fill.energia {
+    background: linear-gradient(90deg, #4ecdc4, #44a08d);
+}
+
+.stat-fill.felicidad {
+    background: linear-gradient(90deg, #f9ca24, #f0932b);
+}
+
+.stat span {
+    font-size: 0.9em;
+    color: #666;
+    margin-left: 10px;
+}
+
+.actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.btn {
+    padding: 12px 15px;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.95em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn:active {
+    transform: translateY(-1px);
+}
+
+.btn-feed {
+    background: #ff6b6b;
+    color: white;
+}
+
+.btn-play {
+    background: #4ecdc4;
+    color: white;
+}
+
+.btn-sleep {
+    background: #a29bfe;
+    color: white;
+}
+
+.btn-pet {
+    background: #f0932b;
+    color: white;
+}
+
+.info {
+    text-align: center;
+    color: #666;
+    font-size: 0.9em;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+#lastAction {
+    color: #999;
+}
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 2em;
+    }
+    
+    .taco-face {
+        font-size: 80px;
+    }
+    
+    .game-area {
+        padding: 20px;
+    }
+}

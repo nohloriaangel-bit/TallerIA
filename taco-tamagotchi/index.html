@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taco - Gato Virtual</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🐱 Taco - Tu Gato Virtual</h1>
+        
+        <div class="game-area">
+            <div class="cat-display">
+                <div id="tacoFace" class="taco-face">😺</div>
+            </div>
+            
+            <div class="response-box">
+                <p id="tacoResponse">¡Hola! Soy Taco</p>
+            </div>
+            
+            <div class="stats">
+                <div class="stat">
+                    <label>Hambre:</label>
+                    <div class="stat-bar">
+                        <div id="hambreBar" class="stat-fill hambre"></div>
+                    </div>
+                    <span id="hambreValue">50</span>
+                </div>
+                
+                <div class="stat">
+                    <label>Energía:</label>
+                    <div class="stat-bar">
+                        <div id="energiaBar" class="stat-fill energia"></div>
+                    </div>
+                    <span id="energiaValue">50</span>
+                </div>
+                
+                <div class="stat">
+                    <label>Felicidad:</label>
+                    <div class="stat-bar">
+                        <div id="felicidadBar" class="stat-fill felicidad"></div>
+                    </div>
+                    <span id="felicidadValue">50</span>
+                </div>
+            </div>
+            
+            <div class="actions">
+                <button id="feedBtn" class="btn btn-feed">🍖 Alimentar</button>
+                <button id="playBtn" class="btn btn-play">🎾 Jugar</button>
+                <button id="sleepBtn" class="btn btn-sleep">😴 Dormir</button>
+                <button id="petBtn" class="btn btn-pet">🤚 Acariciar</button>
+            </div>
+            
+            <div class="info">
+                <p id="lastAction">Última acción: Ninguna</p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>

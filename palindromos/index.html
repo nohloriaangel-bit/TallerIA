@@ -1,0 +1,66 @@
+
+<!doctype html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Detector de Palíndromos</title>
+	<style>
+		body{font-family:system-ui,Arial,Helvetica,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;background:#f7f7f7;margin:0}
+		.card{background:#fff;padding:24px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,.08);width:100%;max-width:520px}
+		label{display:block;margin-bottom:8px;font-weight:600}
+		input[type="text"]{width:100%;padding:10px 12px;font-size:16px;border:1px solid #ddd;border-radius:6px;margin-bottom:12px}
+		button{padding:10px 14px;font-size:16px;border:none;background:#0078d4;color:#fff;border-radius:6px;cursor:pointer}
+		#resultado{margin-top:12px;font-weight:700}
+		.ok{color:green}
+		.no{color:#d9534f}
+	</style>
+</head>
+<body>
+	<main class="card" role="main">
+		<h1>Detector de Palíndromos</h1>
+		<label for="texto">Escribe una palabra o frase</label>
+		<input id="texto" type="text" placeholder="Ej: anilina, la ruta natural" aria-label="Texto a comprobar">
+		<div>
+			<button id="btnComparar">Comparar</button>
+		</div>
+		<p id="resultado" aria-live="polite"></p>
+	</main>
+
+	<script src="palindromos.js"></script>
+	<script>
+		(function(){
+			const input = document.getElementById('texto');
+			const btn = document.getElementById('btnComparar');
+			const res = document.getElementById('resultado');
+
+			function mostrarResultado(esPal){
+				if(esPal){
+					res.textContent = '✅ Es palíndromo';
+					res.className = 'ok';
+				} else {
+					res.textContent = '❌ No es palíndromo';
+					res.className = 'no';
+				}
+			}
+
+			btn.addEventListener('click', ()=>{
+				const valor = input.value.trim();
+				if(!valor){
+					res.textContent = 'Por favor introduce un texto.';
+					res.className = '';
+					return;
+				}
+				// usa la función esPalindromo definida en palindromos.js
+				const es = esPalindromo(valor);
+				mostrarResultado(es);
+			});
+
+			// permitir Enter para comparar
+			input.addEventListener('keydown', (e)=>{
+				if(e.key === 'Enter') btn.click();
+			});
+		})();
+	</script>
+</body>
+</html>

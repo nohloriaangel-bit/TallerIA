@@ -3,826 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Interactivo</title>
-    <style>
-        /* ============== ESTILOS GENERALES ============== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        /* ============== CONTENEDOR PRINCIPAL ============== */
-        .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            padding: 40px;
-            max-width: 600px;
-            width: 100%;
-            min-height: 500px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        /* ============== PANTALLA DE INICIO ============== */
-        .inicio-screen {
-            text-align: center;
-        }
-
-        .inicio-screen h1 {
-            color: #667eea;
-            font-size: 42px;
-            margin-bottom: 15px;
-            text-shadow: 0 2px 4px rgba(102, 126, 234, 0.1);
-        }
-
-        .inicio-screen .subtitle {
-            color: #666;
-            font-size: 16px;
-            margin-bottom: 40px;
-            line-height: 1.6;
-        }
-
-        /* Selector de categoría */
-        .categoria-selector {
-            margin-bottom: 30px;
-        }
-
-        .categoria-selector label {
-            display: block;
-            color: #333;
-            font-weight: 600;
-            margin-bottom: 15px;
-            font-size: 16px;
-        }
-
-        .categoria-selector select {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            border: 2px solid #667eea;
-            border-radius: 8px;
-            background: white;
-            color: #333;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .categoria-selector select:hover {
-            box-shadow: 0 0 10px rgba(102, 126, 234, 0.2);
-        }
-
-        .categoria-selector select:focus {
-            outline: none;
-            box-shadow: 0 0 15px rgba(102, 126, 234, 0.4);
-        }
-
-        /* Botón Comenzar */
-        .btn-comenzar {
-            padding: 15px 40px;
-            font-size: 18px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-comenzar:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.6);
-        }
-
-        .btn-comenzar:active {
-            transform: translateY(0);
-        }
-
-        /* ============== PANTALLA DE PREGUNTAS ============== */
-        .quiz-screen {
-            display: none;
-        }
-
-        /* Contador de pregunta */
-        .pregunta-contador {
-            color: #667eea;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* Barra de progreso */
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #e0e0e0;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-            border-radius: 10px;
-            transition: width 0.3s ease;
-        }
-
-        /* Texto de pregunta */
-        .pregunta-texto {
-            color: #333;
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 30px;
-            line-height: 1.4;
-        }
-
-        /* Contenedor de opciones */
-        .opciones-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        /* Botones de opciones */
-        .opcion-btn {
-            padding: 16px;
-            font-size: 16px;
-            font-weight: 600;
-            background: #f5f5f5;
-            color: #333;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: left;
-            text-transform: capitalize;
-        }
-
-        .opcion-btn:hover {
-            background: #efefef;
-            border-color: #667eea;
-            transform: translateX(5px);
-        }
-
-        .opcion-btn:disabled {
-            cursor: not-allowed;
-        }
-
-        /* Estados de respuesta */
-        .opcion-btn.correcta {
-            background: #d4edda;
-            border-color: #28a745;
-            color: #155724;
-        }
-
-        .opcion-btn.incorrecta {
-            background: #f8d7da;
-            border-color: #dc3545;
-            color: #721c24;
-        }
-
-        /* Feedback visual */
-        .feedback {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 8px;
-            font-weight: 600;
-            text-align: center;
-            display: none;
-            animation: slideIn 0.3s ease;
-        }
-
-        .feedback.correcta {
-            background: #d4edda;
-            color: #155724;
-            border: 2px solid #28a745;
-        }
-
-        .feedback.incorrecta {
-            background: #f8d7da;
-            color: #721c24;
-            border: 2px solid #dc3545;
-        }
-
-        .feedback.visible {
-            display: block;
-        }
-
-        /* Animación de entrada */
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* ============== PANTALLA DE RESULTADOS ============== */
-        .resultados-screen {
-            display: none;
-            text-align: center;
-        }
-
-        .resultados-screen h2 {
-            color: #667eea;
-            font-size: 36px;
-            margin-bottom: 20px;
-        }
-
-        /* Círculo de puntuación */
-        .puntuacion-circulo {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin: 20px auto;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
-        }
-
-        .puntuacion-circulo .numero {
-            font-size: 48px;
-            font-weight: 700;
-        }
-
-        .puntuacion-circulo .total {
-            font-size: 16px;
-            margin-top: 5px;
-        }
-
-        /* Porcentaje */
-        .porcentaje {
-            font-size: 28px;
-            font-weight: 700;
-            color: #667eea;
-            margin: 20px 0;
-        }
-
-        /* Mensaje de desempeño */
-        .mensaje-desempenio {
-            font-size: 20px;
-            font-weight: 600;
-            margin: 20px 0;
-            padding: 15px;
-            border-radius: 8px;
-        }
-
-        .mensaje-desempenio.excelente {
-            background: #d4edda;
-            color: #155724;
-            border: 2px solid #28a745;
-        }
-
-        .mensaje-desempenio.bien {
-            background: #fff3cd;
-            color: #856404;
-            border: 2px solid #ffc107;
-        }
-
-        .mensaje-desempenio.mejorar {
-            background: #f8d7da;
-            color: #721c24;
-            border: 2px solid #dc3545;
-        }
-
-        /* Botones de acción */
-        .botones-resultados {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 30px;
-            flex-wrap: wrap;
-        }
-
-        .btn-accion {
-            padding: 12px 30px;
-            font-size: 16px;
-            font-weight: 600;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-reintentar {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-reintentar:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.6);
-        }
-
-        .btn-home {
-            background: #e0e0e0;
-            color: #333;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-home:hover {
-            background: #d0d0d0;
-            transform: translateY(-2px);
-        }
-
-        /* ============== PANTALLA OCULTA ============== */
-        .hidden {
-            display: none !important;
-        }
-
-        /* ============== RESPONSIVE ============== */
-        @media (max-width: 600px) {
-            .container {
-                padding: 25px;
-                min-height: auto;
-            }
-
-            .inicio-screen h1 {
-                font-size: 28px;
-            }
-
-            .pregunta-texto {
-                font-size: 18px;
-            }
-
-            .opcion-btn {
-                padding: 14px;
-                font-size: 14px;
-            }
-
-            .puntuacion-circulo {
-                width: 120px;
-                height: 120px;
-            }
-
-            .puntuacion-circulo .numero {
-                font-size: 36px;
-            }
-
-            .porcentaje {
-                font-size: 24px;
-            }
-
-            .botones-resultados {
-                flex-direction: column;
-            }
-
-            .btn-accion {
-                width: 100%;
-            }
-        }
-    </style>
+    <title>Taller de Programación con IA</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-title">🚀 Taller de Programación con IA</h1>
+            <p class="nav-subtitle">Explora nuestros proyectos</p>
+        </div>
+    </nav>
+
     <div class="container">
-        <!-- ============== PANTALLA DE INICIO ============== -->
-        <div class="inicio-screen" id="inicioScreen">
-            <h1>📚 Quiz Interactivo</h1>
-            <p class="subtitle">
-                Pon a prueba tus conocimientos sobre JavaScript básico.<br>
-                Responde todas las preguntas y descubre tu puntuación.
-            </p>
+        <section class="intro">
+            <h2>Bienvenido a Nuestro Taller</h2>
+            <p>Aquí encontrarás una colección de proyectos desarrollados durante el taller de programación con IA. Desde aplicaciones interactivas hasta herramientas útiles, todos construidos con JavaScript, HTML y CSS.</p>
+        </section>
 
-            <!-- Selector de categoría -->
-            <div class="categoria-selector">
-                <label for="categoriaSelect">Selecciona una categoría:</label>
-                <select id="categoriaSelect">
-                    <option value="javascript">JavaScript Básico</option>
-                    <option value="html">HTML5</option>
-                    <option value="css">CSS3</option>
-                </select>
+        <div class="projects-grid">
+            <!-- API Project -->
+            <div class="project-card">
+                <div class="project-icon">🔌</div>
+                <h3>API REST</h3>
+                <p>Proyecto de integración con APIs externas</p>
+                <a href="./Api/index.html" class="project-link">Ver Proyecto</a>
             </div>
 
-            <button class="btn-comenzar" id="btnComenzar">Comenzar Quiz</button>
+            <!-- Carpeta IA Project -->
+            <div class="project-card">
+                <div class="project-icon">🤖</div>
+                <h3>Carpeta IA</h3>
+                <p>Exploración de APIs de IA y modelos</p>
+                <a href="./carpetaiaproy/index.html" class="project-link">Ver Proyecto</a>
+            </div>
+
+            <!-- Analizador de Texto -->
+            <div class="project-card">
+                <div class="project-icon">📝</div>
+                <h3>Analizador de Texto</h3>
+                <p>Analiza y procesa texto con estadísticas en tiempo real</p>
+                <a href="./dia 2ia/analizador-texto/index.html" class="project-link">Ver Proyecto</a>
+            </div>
+
+            <!-- Calculadora -->
+            <div class="project-card">
+                <div class="project-icon">🧮</div>
+                <h3>Calculadora</h3>
+                <p>Calculadora interactiva con operaciones básicas</p>
+                <a href="./dia 2ia/calculadora/index.html" class="project-link">Ver Proyecto</a>
+            </div>
+
+            <!-- Conversor de Temperaturas -->
+            <div class="project-card">
+                <div class="project-icon">🌡️</div>
+                <h3>Conversor de Temperaturas</h3>
+                <p>Convierte entre Celsius, Fahrenheit y Kelvin</p>
+                <a href="./dia 2ia/conversor-temperaturas/index.html" class="project-link">Ver Proyecto</a>
+            </div>
+
+            <!-- Ejercicios de Bucles -->
+            <div class="project-card">
+                <div class="project-icon">🔄</div>
+                <h3>Ejercicios de Bucles</h3>
+                <p>Aprende sobre bucles con ejercicios prácticos</p>
+                <a href="./dia 2ia/ejercicios-bucles/index.html" class="project-link">Ver Proyecto</a>
+            </div>
+
+            <!-- Generador de Colores -->
+            <div class="project-card">
+                <div class="project-icon">🎨</div>
+                <h3>Generador de Colores</h3>
+                <p>Genera paletas de colores aleatorios</p>
+                <a href="./dia 2ia/generador-colores/index.html" class="project-link">Ver Proyecto</a>
+            </div>
+
+            <!-- DOM Manipulation -->
+            <div class="project-card">
+                <div class="project-icon">🏗️</div>
+                <h3>Manipulación del DOM</h3>
+                <p>Aprende a interactuar con el DOM dinámicamente</p>
+                <a href="./dia 2ia/ia-2-doc/index.html" class="project-link">Ver Proyecto</a>
+            </div>
+
+            <!-- Quiz -->
+            <div class="project-card">
+                <div class="project-icon">❓</div>
+                <h3>Quiz Interactivo</h3>
+                <p>Prueba tus conocimientos con un cuestionario</p>
+                <a href="./dia 2ia/quiz/index.html" class="project-link">Ver Proyecto</a>
+            </div>
+
+            <!-- Reloj Digital con Alarma -->
+            <div class="project-card">
+                <div class="project-icon">⏰</div>
+                <h3>Reloj Digital con Alarma</h3>
+                <p>Reloj digital interactivo con función de alarma</p>
+                <a href="./dia 2ia/reloj-digital-alarma/index.html" class="project-link">Ver Proyecto</a>
+            </div>
+
+            <!-- Funciones -->
+            <div class="project-card">
+                <div class="project-icon">⚙️</div>
+                <h3>Funciones</h3>
+                <p>Ejemplos y ejercicios de funciones en JavaScript</p>
+                <a href="./funciones/index.html" class="project-link">Ver Proyecto</a>
+            </div>
+
+            <!-- IA Day 1 -->
+            <div class="project-card">
+                <div class="project-icon">📚</div>
+                <h3>IA Día 1</h3>
+                <p>Introducción a conceptos de IA</p>
+                <a href="./ia-carp-day1/index.js" class="project-link">Ver Proyecto</a>
+            </div>
+
+            <!-- Miniproyecto -->
+            <div class="project-card">
+                <div class="project-icon">✨</div>
+                <h3>Miniproyecto</h3>
+                <p>Proyecto especial con funcionalidades avanzadas</p>
+                <a href="./miniproyecto/index.html" class="project-link">Ver Proyecto</a>
+            </div>
+
+            <!-- Palíndromos -->
+            <div class="project-card">
+                <div class="project-icon">🔤</div>
+                <h3>Verificador de Palíndromos</h3>
+                <p>Verifica si una palabra o frase es un palíndromo</p>
+                <a href="./palindromos/index.html" class="project-link">Ver Proyecto</a>
+            </div>
+
+            <!-- Rick and Morty -->
+            <div class="project-card">
+                <div class="project-icon">👽</div>
+                <h3>Rick and Morty API</h3>
+                <p>Explora personajes de Rick and Morty desde una API</p>
+                <a href="./Rick and Morty/index.html" class="project-link">Ver Proyecto</a>
+            </div>
+
+            <!-- Taco Tamagotchi -->
+            <div class="project-card">
+                <div class="project-icon">🐱</div>
+                <h3>Taco - Gato Virtual</h3>
+                <p>Tu mascota virtual tipo Tamagotchi, cuida a Taco</p>
+                <a href="./taco-tamagotchi/index.html" class="project-link">Ver Proyecto</a>
+            </div>
         </div>
 
-        <!-- ============== PANTALLA DE PREGUNTAS ============== -->
-        <div class="quiz-screen" id="quizScreen">
-            <!-- Contador y barra de progreso -->
-            <div class="pregunta-contador" id="contadorPregunta">Pregunta 1 de 5</div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        <section class="footer-section">
+            <h3>Sobre Este Taller</h3>
+            <p>Este taller integra Inteligencia Artificial con programación web para crear proyectos prácticos e interactivos. Cada proyecto demuestra conceptos fundamentales de JavaScript, DOM manipulation, APIs, y más.</p>
+            <div class="tech-stack">
+                <span class="tech-badge">HTML5</span>
+                <span class="tech-badge">CSS3</span>
+                <span class="tech-badge">JavaScript</span>
+                <span class="tech-badge">APIs</span>
+                <span class="tech-badge">IA</span>
             </div>
-
-            <!-- Pregunta -->
-            <div class="pregunta-texto" id="preguntaTexto">
-                ¿Cuál es tu pregunta?
-            </div>
-
-            <!-- Opciones -->
-            <div class="opciones-container" id="opcionesContainer">
-                <!-- Se llenarán dinámicamente -->
-            </div>
-
-            <!-- Feedback -->
-            <div class="feedback" id="feedback">
-                <!-- Se actualizará dinámicamente -->
-            </div>
-        </div>
-
-        <!-- ============== PANTALLA DE RESULTADOS ============== -->
-        <div class="resultados-screen" id="resultadosScreen">
-            <h2>¡Quiz Completado!</h2>
-
-            <!-- Círculo de puntuación -->
-            <div class="puntuacion-circulo">
-                <div class="numero" id="puntuacionNumero">0</div>
-                <div class="total" id="puntuacionTotal">de 0</div>
-            </div>
-
-            <!-- Porcentaje -->
-            <div class="porcentaje" id="porcentajeTexto">0%</div>
-
-            <!-- Mensaje de desempeño -->
-            <div class="mensaje-desempenio" id="mensajeDesempenio">
-                Mensaje de desempeño
-            </div>
-
-            <!-- Botones -->
-            <div class="botones-resultados">
-                <button class="btn-accion btn-reintentar" id="btnReintentar">
-                    🔄 Reintentar
-                </button>
-                <button class="btn-accion btn-home" id="btnHome">
-                    🏠 Ir al Inicio
-                </button>
-            </div>
-        </div>
+        </section>
     </div>
 
-    <script>
-        /* ============== BASE DE DATOS DE PREGUNTAS ============== */
-
-        /**
-         * Base de datos de preguntas organizadas por categoría
-         * Estructura: {pregunta, opciones[], correcta (índice 0-3)}
-         */
-        const preguntasPorCategoria = {
-            javascript: [
-                {
-                    pregunta: "¿Cuál es la forma correcta de declarar una variable en JavaScript?",
-                    opciones: ["var nombre = 'Juan';", "nombre = 'Juan';", "variable nombre = 'Juan';", "declare nombre = 'Juan';"],
-                    correcta: 0,
-                    explicacion: "La forma correcta es usar 'var', 'let' o 'const' para declarar una variable."
-                },
-                {
-                    pregunta: "¿Qué retorna typeof null en JavaScript?",
-                    opciones: ["null", "object", "undefined", "NullType"],
-                    correcta: 1,
-                    explicacion: "JavaScript considera null como un 'object' debido a un error histórico en el lenguaje."
-                },
-                {
-                    pregunta: "¿Cuál es la diferencia entre '==' y '===' en JavaScript?",
-                    opciones: [
-                        "No hay diferencia",
-                        "'==' compara valores, '===' compara valor y tipo",
-                        "'===' compara solo valores",
-                        "'==' es para strings y '===' para números"
-                    ],
-                    correcta: 1,
-                    explicacion: "'==' realiza conversión de tipo (coerción), mientras que '===' es una comparación estricta."
-                },
-                {
-                    pregunta: "¿Qué método se usa para convertir un string a número?",
-                    opciones: ["String()", "Number()", "parseInt()", "toNumber()"],
-                    correcta: 1,
-                    explicacion: "Number() es el método estándar, aunque parseInt() también funciona para enteros."
-                },
-                {
-                    pregunta: "¿Cuál es el resultado de 0.1 + 0.2 === 0.3 en JavaScript?",
-                    opciones: ["true", "false", "undefined", "error"],
-                    correcta: 1,
-                    explicacion: "False porque JavaScript usa punto flotante, causando errores de precisión. Resultado es 0.30000000000000004"
-                }
-            ],
-            html: [
-                {
-                    pregunta: "¿Cuál es la etiqueta correcta para un párrafo en HTML5?",
-                    opciones: ["<paragraph>", "<p>", "<para>", "<text>"],
-                    correcta: 1,
-                    explicacion: "La etiqueta <p> se usa para definir párrafos en HTML."
-                },
-                {
-                    pregunta: "¿Para qué sirve la etiqueta <semantic>?",
-                    opciones: ["Define semántica", "No existe, es ficticia", "Organiza contenido", "Valida HTML"],
-                    correcta: 1,
-                    explicacion: "La etiqueta <semantic> no existe. HTML5 usa etiquetas como <header>, <nav>, <article>, etc."
-                },
-                {
-                    pregunta: "¿Cuál atributo se usa para vincular una hoja de estilos CSS?",
-                    opciones: ["<script>", "<link rel='stylesheet'>", "<style>", "<css>"],
-                    correcta: 1,
-                    explicacion: "Se usa <link rel='stylesheet' href='archivo.css'> para vincular archivos CSS externos."
-                },
-                {
-                    pregunta: "¿Qué hace el atributo 'alt' en una imagen?",
-                    opciones: [
-                        "Aumenta el tamaño de la imagen",
-                        "Proporciona texto alternativo si la imagen no carga",
-                        "Cambia el color de la imagen",
-                        "Acelera la carga de la página"
-                    ],
-                    correcta: 1,
-                    explicacion: "El atributo 'alt' es importante para accesibilidad y SEO."
-                },
-                {
-                    pregunta: "¿Cuál es la estructura básica correcta de un documento HTML5?",
-                    opciones: [
-                        "<html><body></body></html>",
-                        "<!DOCTYPE html><html><head></head><body></body></html>",
-                        "<document><content></content></document>",
-                        "<page><section></section></page>"
-                    ],
-                    correcta: 1,
-                    explicacion: "HTML5 requiere DOCTYPE, html, head (con meta charset) y body."
-                }
-            ],
-            css: [
-                {
-                    pregunta: "¿Cuál es la propiedad CSS para cambiar el color del texto?",
-                    opciones: ["text-color", "color", "font-color", "foreground"],
-                    correcta: 1,
-                    explicacion: "La propiedad 'color' se usa para cambiar el color del texto en CSS."
-                },
-                {
-                    pregunta: "¿Qué hace la propiedad 'display: flex'?",
-                    opciones: [
-                        "Muestra y oculta elementos",
-                        "Activa flexbox para layout flexible",
-                        "Aumenta el tamaño del elemento",
-                        "Aplica un efecto de animación"
-                    ],
-                    correcta: 1,
-                    explicacion: "Flexbox es un modelo de layout moderno que facilita la alineación y distribución de elementos."
-                },
-                {
-                    pregunta: "¿Cuál es la diferencia entre 'margin' y 'padding'?",
-                    opciones: [
-                        "No hay diferencia",
-                        "margin es externo, padding es interno",
-                        "padding es externo, margin es interno",
-                        "Son lo mismo pero con nombres diferentes"
-                    ],
-                    correcta: 1,
-                    explicacion: "Margin es el espacio FUERA del elemento, padding es el espacio DENTRO."
-                },
-                {
-                    pregunta: "¿Cuál es la especificidad correcta de estos selectores?",
-                    opciones: [
-                        "element = class = id",
-                        "id > class > element",
-                        "class > id > element",
-                        "element > class > id"
-                    ],
-                    correcta: 1,
-                    explicacion: "La especificidad: ID (100) > CLASS (10) > ELEMENT (1). ID tiene mayor prioridad."
-                },
-                {
-                    pregunta: "¿Cuál es la propiedad para hacer un elemento redondeado?",
-                    opciones: ["round-corners", "border-radius", "corner-radius", "radius"],
-                    correcta: 1,
-                    explicacion: "La propiedad 'border-radius' crea bordes redondeados en CSS3."
-                }
-            ]
-        };
-
-        /* ============== VARIABLES GLOBALES ============== */
-        let categoriaActual = 'javascript';
-        let preguntasActuales = [];
-        let preguntaIndex = 0;
-        let puntuacion = 0;
-        let respuestaSeleccionada = false;
-
-        /* ============== FUNCIONES DE UTILIDAD ============== */
-
-        /**
-         * Obtiene las preguntas según la categoría seleccionada
-         * @param {string} categoria - Categoría seleccionada
-         */
-        function cargarPreguntas(categoria) {
-            categoriaActual = categoria;
-            preguntasActuales = [...preguntasPorCategoria[categoria]];
-            preguntaIndex = 0;
-            puntuacion = 0;
-        }
-
-        /**
-         * Calcula el porcentaje de aciertos
-         * @returns {number} Porcentaje redondeado
-         */
-        function calcularPorcentaje() {
-            return Math.round((puntuacion / preguntasActuales.length) * 100);
-        }
-
-        /**
-         * Obtiene el mensaje según el desempeño
-         * @returns {object} Objeto con mensaje y clase CSS
-         */
-        function obtenerMensajeDesempenio() {
-            const porcentaje = calcularPorcentaje();
-
-            if (porcentaje >= 80) {
-                return {
-                    texto: "🎉 ¡Excelente! Dominas este tema perfectamente.",
-                    clase: "excelente"
-                };
-            } else if (porcentaje >= 60) {
-                return {
-                    texto: "👍 ¡Bien hecho! Tienes una buena comprensión del tema.",
-                    clase: "bien"
-                };
-            } else {
-                return {
-                    texto: "📚 Puedes mejorar. Revisa los conceptos y vuelve a intentar.",
-                    clase: "mejorar"
-                };
-            }
-        }
-
-        /* ============== FUNCIONES DE PANTALLA ============== */
-
-        /**
-         * Muestra la pantalla de inicio
-         */
-        function mostrarInicio() {
-            document.getElementById('inicioScreen').style.display = 'block';
-            document.getElementById('quizScreen').style.display = 'none';
-            document.getElementById('resultadosScreen').style.display = 'none';
-        }
-
-        /**
-         * Muestra la pantalla de quiz
-         */
-        function mostrarQuiz() {
-            document.getElementById('inicioScreen').style.display = 'none';
-            document.getElementById('quizScreen').style.display = 'block';
-            document.getElementById('resultadosScreen').style.display = 'none';
-
-            mostrarPregunta();
-        }
-
-        /**
-         * Muestra la pantalla de resultados
-         */
-        function mostrarResultados() {
-            document.getElementById('inicioScreen').style.display = 'none';
-            document.getElementById('quizScreen').style.display = 'none';
-            document.getElementById('resultadosScreen').style.display = 'block';
-
-            // Actualizar información de resultados
-            document.getElementById('puntuacionNumero').textContent = puntuacion;
-            document.getElementById('puntuacionTotal').textContent = `de ${preguntasActuales.length}`;
-
-            const porcentaje = calcularPorcentaje();
-            document.getElementById('porcentajeTexto').textContent = `${porcentaje}%`;
-
-            const mensaje = obtenerMensajeDesempenio();
-            const elementoMensaje = document.getElementById('mensajeDesempenio');
-            elementoMensaje.textContent = mensaje.texto;
-            elementoMensaje.className = `mensaje-desempenio ${mensaje.clase}`;
-        }
-
-        /**
-         * Muestra la pregunta actual en pantalla
-         * - Actualiza el número de pregunta
-         * - Actualiza la barra de progreso
-         * - Muestra el texto de la pregunta
-         * - Muestra los botones de opciones
-         */
-        function mostrarPregunta() {
-            const pregunta = preguntasActuales[preguntaIndex];
-            respuestaSeleccionada = false;
-
-            // Actualizar contador
-            document.getElementById('contadorPregunta').textContent = 
-                `Pregunta ${preguntaIndex + 1} de ${preguntasActuales.length}`;
-
-            // Actualizar barra de progreso
-            const porcentajeProgreso = ((preguntaIndex + 1) / preguntasActuales.length) * 100;
-            document.getElementById('progressFill').style.width = porcentajeProgreso + '%';
-
-            // Mostrar pregunta
-            document.getElementById('preguntaTexto').textContent = pregunta.pregunta;
-
-            // Limpiar feedback
-            const feedbackElement = document.getElementById('feedback');
-            feedbackElement.classList.remove('visible', 'correcta', 'incorrecta');
-
-            // Mostrar opciones
-            const contenedorOpciones = document.getElementById('opcionesContainer');
-            contenedorOpciones.innerHTML = '';
-
-            pregunta.opciones.forEach((opcion, index) => {
-                const boton = document.createElement('button');
-                boton.className = 'opcion-btn';
-                boton.textContent = opcion;
-                boton.dataset.index = index;
-                boton.addEventListener('click', () => verificarRespuesta(index, boton));
-                contenedorOpciones.appendChild(boton);
-            });
-        }
-
-        /**
-         * Verifica si la respuesta seleccionada es correcta
-         * - Valida la respuesta
-         * - Muestra feedback visual
-         * - Habilita el siguiente
-         * - Muestra la siguiente pregunta con delay
-         * 
-         * @param {number} indexSeleccionado - Índice de la opción seleccionada
-         * @param {element} botón - Elemento del botón clickeado
-         */
-        function verificarRespuesta(indexSeleccionado, boton) {
-            if (respuestaSeleccionada) return; // Evitar múltiples respuestas
-
-            respuestaSeleccionada = true;
-            const pregunta = preguntasActuales[preguntaIndex];
-            const esCorrecta = indexSeleccionado === pregunta.correcta;
-
-            // Desactivar todos los botones
-            document.querySelectorAll('.opcion-btn').forEach(btn => {
-                btn.disabled = true;
-            });
-
-            // Mostrar respuesta correcta
-            const botonesOpciones = document.querySelectorAll('.opcion-btn');
-            botonesOpciones[pregunta.correcta].classList.add('correcta');
-
-            // Si es incorrecta, mostrar la seleccionada como incorrecta
-            if (!esCorrecta) {
-                boton.classList.add('incorrecta');
-            } else {
-                puntuacion++;
-            }
-
-            // Mostrar feedback
-            const feedbackElement = document.getElementById('feedback');
-            feedbackElement.textContent = esCorrecta ? 
-                `✅ ¡Correcto! ${pregunta.explicacion}` : 
-                `❌ Incorrecto. ${pregunta.explicacion}`;
-            feedbackElement.className = `feedback visible ${esCorrecta ? 'correcta' : 'incorrecta'}`;
-
-            // Siguiente pregunta con delay
-            setTimeout(() => {
-                preguntaIndex++;
-
-                if (preguntaIndex < preguntasActuales.length) {
-                    mostrarPregunta();
-                } else {
-                    mostrarResultados();
-                }
-            }, 2500); // Esperar 2.5 segundos antes de siguiente pregunta
-        }
-
-        /* ============== EVENT LISTENERS ============== */
-
-        // Botón Comenzar
-        document.getElementById('btnComenzar').addEventListener('click', () => {
-            const categoriaSelect = document.getElementById('categoriaSelect').value;
-            cargarPreguntas(categoriaSelect);
-            mostrarQuiz();
-        });
-
-        // Botón Reintentar
-        document.getElementById('btnReintentar').addEventListener('click', () => {
-            cargarPreguntas(categoriaActual);
-            mostrarQuiz();
-        });
-
-        // Botón Ir al Inicio
-        document.getElementById('btnHome').addEventListener('click', () => {
-            mostrarInicio();
-        });
-
-        /* ============== INICIALIZACIÓN ============== */
-        mostrarInicio();
-        console.log('✓ Quiz inicializado correctamente');
-    </script>
+    <footer class="footer">
+        <p>&copy; 2025 Taller de Programación con IA. Todos los derechos reservados.</p>
+    </footer>
 </body>
 </html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analizador de Texto</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Analizador de Texto</h1>
+        
+        <div class="input-section">
+            <label for="texto">Escriba su texto aquí:</label>
+            <textarea id="texto" placeholder="Ingrese el texto a analizar..."></textarea>
+        </div>
+
+        <div class="stats-section">
+            <h2>Estadísticas</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Caracteres (con espacios)</h3>
+                    <p id="caracteres-con-espacios" class="stat-value">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Caracteres (sin espacios)</h3>
+                    <p id="caracteres-sin-espacios" class="stat-value">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Palabras</h3>
+                    <p id="palabras" class="stat-value">0</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="analyzer.js"></script>
+</body>
+</html>

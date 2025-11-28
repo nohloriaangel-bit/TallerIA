@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Colores Aleatorios</title>
+    <style>
+        /* Resetear estilos por defecto */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Estilos del body */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Contenedor principal */
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Título principal */
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        /* Div que muestra el color */
+        .color-display {
+            width: 100%;
+            height: 300px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            transition: background-color 0.5s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            background-color: #667eea;
+        }
+
+        /* Contenedor de botones */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* Estilos generales de botones */
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        /* Botón Generar Color */
+        #generateBtn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        #generateBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        #generateBtn:active {
+            transform: translateY(0);
+        }
+
+        /* Botón Copiar */
+        #copyBtn {
+            background: #27ae60;
+            color: white;
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+        }
+
+        #copyBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(39, 174, 96, 0.6);
+        }
+
+        #copyBtn:active {
+            transform: translateY(0);
+        }
+
+        /* Estado de botón copiado */
+        #copyBtn.copied {
+            background: #16a085;
+        }
+
+        /* Párrafo con el código hexadecimal */
+        .color-code {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        /* Código hexadecimal destacado */
+        .color-code span {
+            font-size: 28px;
+            color: #667eea;
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        /* Información adicional */
+        .info {
+            background: #eef5ff;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #2c3e50;
+            margin-top: 25px;
+            line-height: 1.6;
+        }
+
+        /* Notificación de copia */
+        .copy-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #27ae60;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateX(400px);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .copy-notification.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Responsive para dispositivos más pequeños */
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 24px;
+                margin-bottom: 20px;
+            }
+
+            .color-display {
+                height: 250px;
+                margin-bottom: 20px;
+            }
+
+            .button-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            button {
+                min-width: 100%;
+                flex: unset;
+            }
+
+            .copy-notification {
+                top: 10px;
+                right: 10px;
+                left: 10px;
+                transform: translateY(-100px);
+            }
+
+            .copy-notification.show {
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Generador de Colores Aleatorios</h1>
+        
+        <!-- Div que muestra el color actual -->
+        <div class="color-display" id="colorDisplay"></div>
+
+        <!-- Grupo de botones -->
+        <div class="button-group">
+            <button id="generateBtn">Generar Color</button>
+            <button id="copyBtn">📋 Copiar Código</button>
+        </div>
+
+        <!-- Párrafo con el código hexadecimal -->
+        <div class="color-code">
+            Código del color:
+            <span id="colorCode">#667eea</span>
+        </div>
+
+        <!-- Información -->
+        <div class="info">
+            <strong>💡 Consejos:</strong><br>
+            • Haz clic en "Generar Color" para obtener un color aleatorio<br>
+            • Puedes copiar el código hexadecimal con un solo clic<br>
+            • Los colores se generan en formato #RRGGBB
+        </div>
+    </div>
+
+    <!-- Notificación de copia -->
+    <div class="copy-notification" id="notification"></div>
+
+    <script>
+        /**
+         * Genera un número hexadecimal aleatorio entre 0 y 255
+         * @returns {string} Número en formato hexadecimal (00-FF)
+         */
+        function generarComponenteHex() {
+            // Generar número aleatorio entre 0 y 255
+            const numero = Math.floor(Math.random() * 256);
+            
+            // Convertir a hexadecimal y asegurar que tenga 2 dígitos
+            return numero.toString(16).padStart(2, '0').toUpperCase();
+        }
+
+        /**
+         * Genera un color hexadecimal aleatorio completo (#RRGGBB)
+         * @returns {string} Color en formato hexadecimal (ej: #A3F5BC)
+         */
+        function generarColorAleatorio() {
+            // Concatenar tres componentes hexadecimales aleatorios
+            const rojo = generarComponenteHex();
+            const verde = generarComponenteHex();
+            const azul = generarComponenteHex();
+            
+            return `#${rojo}${verde}${azul}`;
+        }
+
+        /**
+         * Actualiza el color mostrado en la página
+         * - Cambia el fondo del div
+         * - Actualiza el texto con el código hexadecimal
+         * - Aplica transición suave
+         */
+        function cambiarColor() {
+            // Generar nuevo color
+            const nuevoColor = generarColorAleatorio();
+            
+            // Actualizar el elemento que muestra el color
+            const colorDisplay = document.getElementById('colorDisplay');
+            colorDisplay.style.backgroundColor = nuevoColor;
+            
+            // Actualizar el código hexadecimal mostrado
+            document.getElementById('colorCode').textContent = nuevoColor;
+            
+            // Registrar en consola (para debugging)
+            console.log(`Color generado: ${nuevoColor}`);
+        }
+
+        /**
+         * Copia el código hexadecimal del color actual al portapapeles
+         * - Accede al código mostrado
+         * - Lo copia al portapapeles
+         * - Muestra una notificación visual de confirmación
+         */
+        function copiarAlPortapapeles() {
+            // Obtener el código del color actual
+            const colorCode = document.getElementById('colorCode').textContent;
+            
+            // Usar la API del portapapeles (Clipboard API)
+            navigator.clipboard.writeText(colorCode).then(() => {
+                // Si la copia fue exitosa
+                mostrarNotificacion(`¡Copiado: ${colorCode}`);
+                
+                // Cambiar el botón temporalmente para dar feedback visual
+                const botonCopiar = document.getElementById('copyBtn');
+                botonCopiar.classList.add('copied');
+                botonCopiar.textContent = '✅ ¡Copiado!';
+                
+                // Restaurar el botón después de 2 segundos
+                setTimeout(() => {
+                    botonCopiar.classList.remove('copied');
+                    botonCopiar.textContent = '📋 Copiar Código';
+                }, 2000);
+                
+            }).catch(() => {
+                // Si hay error al copiar
+                mostrarNotificacion('Error al copiar', true);
+                console.error('No se pudo copiar al portapapeles');
+            });
+        }
+
+        /**
+         * Muestra una notificación temporal en la esquina superior derecha
+         * @param {string} mensaje - El mensaje a mostrar
+         * @param {boolean} esError - Si es true, muestra notificación de error
+         */
+        function mostrarNotificacion(mensaje, esError = false) {
+            const notificacion = document.getElementById('notification');
+            notificacion.textContent = mensaje;
+            notificacion.style.background = esError ? '#e74c3c' : '#27ae60';
+            notificacion.classList.add('show');
+            
+            // Ocultar la notificación después de 3 segundos
+            setTimeout(() => {
+                notificacion.classList.remove('show');
+            }, 3000);
+        }
+
+        // Event Listeners - Asignar funciones a los botones
+        document.getElementById('generateBtn').addEventListener('click', cambiarColor);
+        document.getElementById('copyBtn').addEventListener('click', copiarAlPortapapeles);
+
+        // Generar un color inicial al cargar la página
+        cambiarColor();
+
+        // Permitir generar color al presionar la tecla Espacio
+        document.addEventListener('keypress', (event) => {
+            // Verificar que no estemos escribiendo en un input
+            if (event.code === 'Space' && event.target === document.body) {
+                event.preventDefault();
+                cambiarColor();
+            }
+        });
+    </script>
+</body>
+</html>
